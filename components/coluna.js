@@ -1,8 +1,9 @@
 export default class Coluna {
-    constructor(column, onDelete, onAddTask) {
+    constructor(column, onDelete, onAddTask, onEdit) {
         this.column = column;
         this.onDelete = onDelete;
         this.onAddTask = onAddTask;
+        this.onEdit = onEdit;
     }
 
     render() {
@@ -16,6 +17,9 @@ export default class Coluna {
                 <div class="column-actions">
                     <button class="column-btn add-task" title="Adicionar Tarefa">
                         <i class="fas fa-plus"></i>
+                    </button>
+                    <button class="column-btn edit-column" title="Editar Coluna">
+                        <i class="fas fa-edit"></i>
                     </button>
                     <button class="column-btn delete-column" title="Excluir Coluna">
                         <i class="fas fa-trash"></i>
@@ -31,10 +35,12 @@ export default class Coluna {
 
     setupEventListeners(element) {
         const addTaskBtn = element.querySelector('.add-task');
+        const editColumnBtn = element.querySelector('.edit-column');
         const deleteColumnBtn = element.querySelector('.delete-column');
         const taskList = element.querySelector('.task-list');
         
         addTaskBtn.addEventListener('click', () => this.onAddTask(this.column.Id));
+        editColumnBtn.addEventListener('click', () => this.onEdit(this.column));
         deleteColumnBtn.addEventListener('click', () => this.onDelete(this.column.Id));
         
         this.setupDragAndDrop(taskList);

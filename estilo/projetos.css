@@ -1,16 +1,19 @@
 .app-container {
     display: flex;
     min-height: 100vh;
+    color: var(--text-color);
 }
 
 .sidebar {
     width: 250px;
-    background: var(--card-background);
-    backdrop-filter: blur(10px);
+    background: rgba(255, 255, 255, 0.8);
+    backdrop-filter: blur(25px) saturate(200%);
+    -webkit-backdrop-filter: blur(25px) saturate(200%);
     padding: 2rem;
     display: flex;
     flex-direction: column;
-    border-right: 1px solid rgba(0, 0, 0, 0.1);
+    border-right: 1px solid rgba(0, 0, 0, 0.05);
+    box-shadow: 4px 0 24px rgba(0, 0, 0, 0.05);
 }
 
 .sidebar-header {
@@ -127,18 +130,26 @@ input:checked + .slider:before {
 }
 
 .project-card {
-    background: var(--card-background);
+    background: rgba(255, 255, 255, 0.7);
+    backdrop-filter: blur(20px) saturate(180%);
+    -webkit-backdrop-filter: blur(20px) saturate(180%);
     border-radius: 15px;
     padding: 1.5rem;
     cursor: pointer;
     transition: all 0.3s ease;
-    backdrop-filter: blur(10px);
-    border: 1px solid rgba(255, 255, 255, 0.1);
+    border: 1px solid rgba(255, 255, 255, 0.3);
+    box-shadow: 
+        0 4px 24px -1px rgba(0, 0, 0, 0.06),
+        0 0 1px 0 rgba(0, 0, 0, 0.05);
 }
 
 .project-card:hover {
     transform: translateY(-5px);
-    box-shadow: 0 8px 24px rgba(0, 0, 0, 0.1);
+    background: rgba(255, 255, 255, 0.8);
+    box-shadow: 
+        0 8px 32px rgba(0, 0, 0, 0.08),
+        0 0 1px 0 rgba(0, 0, 0, 0.05);
+    border: 1px solid rgba(255, 255, 255, 0.4);
 }
 
 .project-header {
@@ -151,12 +162,14 @@ input:checked + .slider:before {
 .project-title {
     font-size: 1.25rem;
     font-weight: 600;
+    color: var(--text-color);
 }
 
 .project-description {
     color: var(--text-secondary);
     margin-bottom: 1rem;
     font-size: 0.9rem;
+    line-height: 1.5;
 }
 
 .project-footer {
@@ -165,6 +178,12 @@ input:checked + .slider:before {
     align-items: center;
     font-size: 0.9rem;
     color: var(--text-secondary);
+    opacity: 0.8;
+}
+
+.project-footer i {
+    color: var(--primary-color);
+    opacity: 0.7;
 }
 
 .logout-btn {
@@ -197,4 +216,108 @@ input:checked + .slider:before {
 
 .project-card {
     animation: fadeIn 0.5s ease-out;
+}
+
+/* Ajustes para tema escuro */
+.dark-theme .sidebar {
+    background: rgba(15, 15, 20, 0.5);
+    border-right: 1px solid rgba(255, 255, 255, 0.05);
+}
+
+.dark-theme .project-card {
+    background: rgba(20, 20, 25, 0.4);
+    border: 1px solid rgba(255, 255, 255, 0.05);
+}
+
+.dark-theme .project-card:hover {
+    box-shadow: 
+        0 8px 32px rgba(0, 0, 0, 0.2),
+        0 0 1px 0 rgba(0, 0, 0, 0.1);
+    border: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+/* Animação de brilho sutil */
+@keyframes card-glow {
+    0%, 100% { 
+        box-shadow: 
+            0 8px 32px rgba(0, 0, 0, 0.08),
+            0 0 1px 0 rgba(0, 0, 0, 0.05);
+        border-color: rgba(255, 255, 255, 0.3);
+    }
+    50% { 
+        box-shadow: 
+            0 8px 32px rgba(var(--primary-rgb), 0.15),
+            0 0 1px 0 rgba(var(--primary-rgb), 0.1);
+        border-color: rgba(255, 255, 255, 0.5);
+    }
+}
+
+.project-card:hover {
+    animation: card-glow 3s infinite;
+}
+
+/* Ajuste para o tema claro */
+:root {
+    --card-background: rgba(255, 255, 255, 0.7);
+    --text-color: #1d1d1f;
+    --text-secondary: #666666;
+}
+
+.project-card {
+    background: rgba(255, 255, 255, 0.7);
+    backdrop-filter: blur(20px) saturate(180%);
+    -webkit-backdrop-filter: blur(20px) saturate(180%);
+    border-radius: 15px;
+    padding: 1.5rem;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    border: 1px solid rgba(255, 255, 255, 0.3);
+    box-shadow: 
+        0 4px 24px -1px rgba(0, 0, 0, 0.06),
+        0 0 1px 0 rgba(0, 0, 0, 0.05);
+}
+
+.project-title {
+    font-size: 1.25rem;
+    font-weight: 600;
+    color: var(--text-color);
+}
+
+.project-description {
+    color: var(--text-secondary);
+    margin-bottom: 1rem;
+    font-size: 0.9rem;
+    line-height: 1.5;
+}
+
+.project-footer {
+    color: var(--text-secondary);
+    font-size: 0.9rem;
+}
+
+.project-footer i {
+    color: var(--primary-color);
+}
+
+.sidebar-header h2 {
+    color: var(--text-color);
+    margin: 0;
+}
+
+.user-info span {
+    color: var(--text-color);
+}
+
+.theme-toggle i {
+    color: var(--text-secondary);
+}
+
+.logout-btn {
+    color: var(--text-color);
+}
+
+/* Ajustes para tema escuro */
+.dark-theme .project-card {
+    background: rgba(20, 20, 25, 0.4);
+    border: 1px solid rgba(255, 255, 255, 0.05);
 }

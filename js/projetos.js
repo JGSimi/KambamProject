@@ -1,6 +1,7 @@
 import requests from '../service/request.js';
 import user from '../service/user.js';
 import theme from '../service/theme.js';
+import { applyBackground } from './backgroundManager.js';
 
 // Verifica se o usuário está logado
 if (!user.load()) {
@@ -120,9 +121,15 @@ logoutBtn.addEventListener('click', () => {
 });
 
 themeToggle.checked = theme.current === 'dark';
-themeToggle.addEventListener('change', () => {
-    theme.toggle();
+themeToggle.addEventListener('change', (e) => {
+    const isDark = theme.toggle() === 'dark';
+    applyBackground('#007AFF', isDark);
 });
 
 // Carrega os projetos ao iniciar
 loadProjects();
+
+// Após carregar os projetos
+const defaultColor = '#007AFF';
+const isDark = document.body.classList.contains('dark-theme');
+applyBackground(defaultColor, isDark);

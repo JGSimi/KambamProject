@@ -25,29 +25,26 @@ const themes = {
 };
 
 const theme = {
-    current: 'light',
-
     init() {
         const savedTheme = localStorage.getItem('theme') || 'light';
-        this.setTheme(savedTheme);
-    },
-
-    setTheme(themeName) {
-        if (!themes[themeName]) return;
-
-        this.current = themeName;
-        localStorage.setItem('theme', themeName);
-        
-        Object.entries(themes[themeName]).forEach(([property, value]) => {
-            document.documentElement.style.setProperty(property, value);
-        });
-
-        document.body.classList.toggle('dark-theme', themeName === 'dark');
+        this.current = savedTheme;
+        document.body.classList.toggle('dark-theme', savedTheme === 'dark');
     },
 
     toggle() {
-        const newTheme = this.current === 'light' ? 'dark' : 'light';
-        this.setTheme(newTheme);
+        const newTheme = this.current === 'dark' ? 'light' : 'dark';
+        localStorage.setItem('theme', newTheme);
+        this.current = newTheme;
+        document.body.classList.toggle('dark-theme');
+        return this.current;
+    },
+
+    get current() {
+        return localStorage.getItem('theme') || 'light';
+    },
+
+    set current(value) {
+        localStorage.setItem('theme', value);
     }
 };
 

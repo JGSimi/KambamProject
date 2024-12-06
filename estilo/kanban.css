@@ -6,11 +6,13 @@
 .sidebar {
     width: 300px;
     background: var(--card-background);
-    backdrop-filter: blur(10px);
+    backdrop-filter: blur(20px) saturate(200%);
+    -webkit-backdrop-filter: blur(20px) saturate(200%);
     padding: 2rem;
     display: flex;
     flex-direction: column;
-    border-right: 1px solid var(--border-color);
+    border-right: 1px solid rgba(255, 255, 255, 0.1);
+    box-shadow: 4px 0 24px rgba(0, 0, 0, 0.05);
 }
 
 .sidebar-header {
@@ -105,10 +107,21 @@
 .kanban-column {
     min-width: 300px;
     background: var(--card-background);
+    backdrop-filter: blur(20px) saturate(180%);
+    -webkit-backdrop-filter: blur(20px) saturate(180%);
     border-radius: 12px;
     padding: 1rem;
     display: flex;
     flex-direction: column;
+    border: 1px solid rgba(255, 255, 255, 0.15);
+    box-shadow: 
+        0 4px 24px -1px rgba(0, 0, 0, 0.1),
+        0 0 1px 0 rgba(0, 0, 0, 0.05);
+    transition: all 0.3s ease;
+}
+
+.kanban-column:hover {
+    animation: subtle-glow 3s infinite;
 }
 
 .column-header {
@@ -154,17 +167,24 @@
 }
 
 .task-card {
-    background: var(--background-color);
+    background: var(--card-background);
+    backdrop-filter: blur(15px) saturate(160%);
+    -webkit-backdrop-filter: blur(15px) saturate(160%);
     border-radius: 8px;
     padding: 1rem;
     cursor: grab;
     transition: all 0.3s ease;
     animation: slideIn 0.3s ease-out;
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    box-shadow: 
+        0 2px 12px -1px rgba(0, 0, 0, 0.05),
+        0 0 1px 0 rgba(0, 0, 0, 0.05);
 }
 
 .task-card:hover {
     transform: translateY(-2px);
-    box-shadow: 0 4px 12px var(--shadow-color);
+    box-shadow: 0 8px 24px rgba(0, 0, 0, 0.1);
+    border: 1px solid rgba(255, 255, 255, 0.2);
 }
 
 .task-card.dragging {
@@ -239,4 +259,69 @@
     .kanban-column {
         min-width: 280px;
     }
+}
+
+.task-actions {
+    display: flex;
+    gap: 0.5rem;
+    margin-top: 0.5rem;
+    opacity: 0;
+    transition: opacity 0.3s ease;
+}
+
+.task-card:hover .task-actions {
+    opacity: 1;
+}
+
+.task-btn {
+    background: none;
+    border: none;
+    color: var(--text-secondary);
+    cursor: pointer;
+    padding: 0.5rem;
+    border-radius: 4px;
+    transition: all 0.3s ease;
+}
+
+.task-btn:hover {
+    color: var(--primary-color);
+    background: rgba(0, 122, 255, 0.1);
+    transform: translateY(-1px);
+}
+
+.task-btn.edit-task:hover {
+    color: var(--primary-color);
+}
+
+.task-btn.delete-task:hover {
+    color: #ff3b30;
+    background: rgba(255, 59, 48, 0.1);
+}
+
+body {
+    transition: background-color 0.3s ease, background-image 0.3s ease;
+}
+
+/* Ajustes para tema escuro */
+.dark-theme .kanban-column {
+    background: rgba(20, 20, 25, 0.4);
+    border: 1px solid rgba(255, 255, 255, 0.05);
+}
+
+.dark-theme .task-card {
+    background: rgba(25, 25, 30, 0.4);
+}
+
+.dark-theme .sidebar {
+    background: rgba(15, 15, 20, 0.5);
+}
+
+/* Adiciona um sutil efeito de brilho nos cards */
+@keyframes subtle-glow {
+    0%, 100% { box-shadow: 0 8px 32px rgba(0, 0, 0, 0.1); }
+    50% { box-shadow: 0 8px 32px rgba(var(--primary-rgb), 0.2); }
+}
+
+.kanban-column:hover {
+    animation: subtle-glow 3s infinite;
 }

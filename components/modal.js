@@ -95,40 +95,83 @@ export default class Modal {
         }, 300);
     }
 
-    static createTaskModal(onSubmit) {
+    static createTaskModal(onSubmit, existingTask = null) {
         return new Modal({
-            title: 'Nova Tarefa',
+            title: existingTask ? 'Editar Tarefa' : 'Nova Tarefa',
             content: `
                 <form id="taskForm">
                     <div class="form-group">
                         <label for="taskTitle">Título</label>
-                        <input type="text" id="taskTitle" name="title" required>
+                        <input type="text" 
+                               id="taskTitle" 
+                               name="title" 
+                               value="${existingTask?.Title || ''}"
+                               required>
                     </div>
                     <div class="form-group">
                         <label for="taskDescription">Descrição</label>
-                        <textarea id="taskDescription" name="description" rows="3"></textarea>
+                        <textarea id="taskDescription" 
+                                  name="description" 
+                                  rows="3">${existingTask?.Description || ''}</textarea>
                     </div>
                 </form>
             `,
             onSubmit,
-            submitText: 'Criar Tarefa'
+            submitText: existingTask ? 'Salvar Alterações' : 'Criar Tarefa'
         });
     }
 
-    static createColumnModal(onSubmit) {
+    static createColumnModal(onSubmit, existingColumn = null) {
         return new Modal({
-            title: 'Nova Coluna',
+            title: existingColumn ? 'Editar Coluna' : 'Nova Coluna',
             content: `
                 <form id="columnForm">
                     <div class="form-group">
                         <label for="columnName">Nome da Coluna</label>
-                        <input type="text" id="columnName" name="name" required>
+                        <input type="text" 
+                               id="columnName" 
+                               name="name" 
+                               value="${existingColumn?.Name || ''}"
+                               required>
                     </div>
                 </form>
             `,
             onSubmit,
-            submitText: 'Criar Coluna',
+            submitText: existingColumn ? 'Salvar Alterações' : 'Criar Coluna',
             size: 'small'
+        });
+    }
+
+    static createProjectModal(onSubmit, existingProject = null) {
+        return new Modal({
+            title: existingProject ? 'Editar Projeto' : 'Novo Projeto',
+            content: `
+                <form id="projectForm">
+                    <div class="form-group">
+                        <label for="projectName">Nome do Projeto</label>
+                        <input type="text" 
+                               id="projectName" 
+                               name="name" 
+                               value="${existingProject?.Name || ''}"
+                               required>
+                    </div>
+                    <div class="form-group">
+                        <label for="projectDescription">Descrição</label>
+                        <textarea id="projectDescription" 
+                                name="description" 
+                                rows="3">${existingProject?.Description || ''}</textarea>
+                    </div>
+                    <div class="form-group">
+                        <label for="projectColor">Cor do Projeto</label>
+                        <input type="color" 
+                               id="projectColor" 
+                               name="color" 
+                               value="${existingProject?.HexaBackgroundCoor || '#007AFF'}">
+                    </div>
+                </form>
+            `,
+            onSubmit,
+            submitText: existingProject ? 'Salvar Alterações' : 'Criar Projeto'
         });
     }
 }
