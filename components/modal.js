@@ -8,13 +8,18 @@ export default class Modal {
         this.submitText = options.submitText || 'Salvar';
         this.cancelText = options.cancelText || 'Cancelar';
         this.size = options.size || 'medium';
+        this.position = options.position || 'center';
+        this.animation = options.animation || 'fade';
+        this.backgroundImage = options.backgroundImage || null;
+        this.validationRules = options.validationRules || {};
+        this.customFormComponents = options.customFormComponents || {};
         this.element = null;
         this.touchStartY = 0;
+        this.touchStartX = 0;
         this.touchDiff = 0;
         this.isClosing = false;
         this.scrollLock = false;
         
-        // Adiciona os estilos se ainda não foram adicionados
         if (!document.getElementById('modal-styles')) {
             this.addStyles();
         }
@@ -298,6 +303,156 @@ export default class Modal {
             .modal .form-group:last-child {
                 margin-bottom: 0;
             }
+
+            /* Position variants */
+            .modal-right .modal-content {
+                margin-left: auto;
+                height: 100vh;
+                border-radius: 16px 0 0 16px;
+                transform: translateX(100%);
+            }
+
+            .modal-left .modal-content {
+                margin-right: auto;
+                height: 100vh;
+                border-radius: 0 16px 16px 0;
+                transform: translateX(-100%);
+            }
+
+            .modal-bottom .modal-content {
+                margin-top: auto;
+                border-radius: 16px 16px 0 0;
+                transform: translateY(100%);
+            }
+
+            /* Size variants */
+            .modal-small .modal-content { max-width: 400px; }
+            .modal-medium .modal-content { max-width: 600px; }
+            .modal-large .modal-content { max-width: 800px; }
+            .modal-fullscreen .modal-content {
+                width: 100%;
+                height: 100%;
+                max-width: none;
+                border-radius: 0;
+            }
+
+            /* Animation variants */
+            .animation-fade .modal-content {
+                opacity: 0;
+                transform: scale(0.95);
+                transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+            }
+
+            .animation-slide.modal-right .modal-content {
+                transform: translateX(100%);
+            }
+
+            .animation-slide.modal-left .modal-content {
+                transform: translateX(-100%);
+            }
+
+            .animation-slide.modal-bottom .modal-content {
+                transform: translateY(100%);
+            }
+
+            .animation-scale .modal-content {
+                transform: scale(0.7);
+                opacity: 0;
+            }
+
+            .modal.show .modal-content {
+                transform: none;
+                opacity: 1;
+            }
+
+            /* Background image support */
+            .modal-content[style*="background-image"] {
+                background-size: cover;
+                background-position: center;
+                background-repeat: no-repeat;
+            }
+
+            /* Toast notifications */
+            .modal-toast {
+                position: fixed;
+                bottom: 24px;
+                left: 50%;
+                transform: translateX(-50%) translateY(100%);
+                background: var(--card-background);
+                padding: 12px 24px;
+                border-radius: 8px;
+                box-shadow: 0 4px 12px var(--shadow-color);
+                display: flex;
+                align-items: center;
+                gap: 8px;
+                z-index: 1100;
+                transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+            }
+
+            .modal-toast.show {
+                transform: translateX(-50%) translateY(0);
+            }
+
+            .modal-toast i {
+                font-size: 1.2rem;
+            }
+
+            .toast-success { border-left: 4px solid #34C759; }
+            .toast-error { border-left: 4px solid #FF3B30; }
+            .toast-warning { border-left: 4px solid #FF9500; }
+            .toast-info { border-left: 4px solid #007AFF; }
+
+            /* Custom form components */
+            .form-group {
+                margin-bottom: 20px;
+                position: relative;
+            }
+
+            .form-group label {
+                display: block;
+                margin-bottom: 8px;
+                font-weight: 500;
+                color: var(--text-color);
+            }
+
+            .form-control {
+                width: 100%;
+                padding: 12px;
+                border: 1px solid var(--border-color);
+                border-radius: 8px;
+                background: var(--card-background);
+                color: var(--text-color);
+                transition: all 0.2s ease;
+            }
+
+            .form-control:focus {
+                outline: none;
+                border-color: var(--primary-color);
+                box-shadow: 0 0 0 3px var(--shadow-color);
+            }
+
+            .form-error-message {
+                color: #FF3B30;
+                font-size: 0.85rem;
+                margin-top: 4px;
+                display: flex;
+                align-items: center;
+                gap: 4px;
+            }
+
+            /* Keyboard navigation */
+            .modal *:focus-visible {
+                outline: 2px solid var(--primary-color);
+                outline-offset: 2px;
+                border-radius: 4px;
+            }
+
+            /* Touch feedback */
+            @media (hover: none) {
+                .modal button:active {
+                    transform: scale(0.95);
+                }
+            }
         `;
         document.head.appendChild(style);
     }
@@ -305,13 +460,17 @@ export default class Modal {
     createModal() {
         const modal = document.createElement('div');
         modal.id = this.id;
-        modal.className = `modal modal-${this.size} fade-in-up`;
+        modal.className = `modal modal-${this.size} modal-${this.position} animation-${this.animation}`;
         modal.setAttribute('role', 'dialog');
         modal.setAttribute('aria-modal', 'true');
         modal.setAttribute('aria-labelledby', `${this.id}-title`);
         
+        const backgroundStyle = this.backgroundImage ? 
+            `style="background-image: url('${this.backgroundImage}');"` : '';
+        
         modal.innerHTML = `
-            <div class="modal-content glass" role="document">
+            <div class="modal-backdrop"></div>
+            <div class="modal-content glass" role="document" ${backgroundStyle}>
                 <div class="modal-header p-responsive flex flex-between flex-center">
                     <h2 class="text-responsive" id="${this.id}-title">${this.title}</h2>
                     <button class="close-btn touch-target" title="Fechar" aria-label="Fechar modal">
@@ -341,6 +500,7 @@ export default class Modal {
         this.setupResponsiveLayout();
         this.setupKeyboardNavigation();
         this.setupTouchGestures();
+        this.setupCustomFormComponents();
     }
 
     setupEventListeners() {
@@ -395,13 +555,17 @@ export default class Modal {
         const modalContent = this.element.querySelector('.modal-content');
         const dragHandle = this.element.querySelector('.modal-drag-handle');
 
+        let startX = 0;
         let startY = 0;
+        let currentX = 0;
         let currentY = 0;
         let isDragging = false;
 
         const handleTouchStart = (e) => {
             if (this.scrollLock) return;
+            startX = e.touches[0].clientX;
             startY = e.touches[0].clientY;
+            currentX = startX;
             currentY = startY;
             isDragging = true;
             modalContent.classList.add('swiping');
@@ -410,13 +574,20 @@ export default class Modal {
 
         const handleTouchMove = (e) => {
             if (!isDragging || this.scrollLock) return;
+            currentX = e.touches[0].clientX;
             currentY = e.touches[0].clientY;
-            const diff = currentY - startY;
+            const diffX = currentX - startX;
+            const diffY = currentY - startY;
 
-            if (diff > 0) {
-                const opacity = Math.max(0, 1 - diff / 500);
-                modalContent.style.transform = `translateY(${diff}px)`;
-                this.element.style.backgroundColor = `rgba(0, 0, 0, ${0.5 * opacity})`;
+            if (this.position === 'bottom' && diffY > 0) {
+                modalContent.style.transform = `translateY(${diffY}px)`;
+                this.element.style.backgroundColor = `rgba(0, 0, 0, ${0.5 - diffY/1000})`;
+            } else if (this.position === 'right' && diffX < 0) {
+                modalContent.style.transform = `translateX(${diffX}px)`;
+                this.element.style.backgroundColor = `rgba(0, 0, 0, ${0.5 + diffX/1000})`;
+            } else if (this.position === 'left' && diffX > 0) {
+                modalContent.style.transform = `translateX(${diffX}px)`;
+                this.element.style.backgroundColor = `rgba(0, 0, 0, ${0.5 - diffX/1000})`;
             }
         };
 
@@ -426,8 +597,15 @@ export default class Modal {
             modalContent.classList.remove('swiping');
             modalContent.style.transition = '';
 
-            const diff = currentY - startY;
-            if (diff > 100) {
+            const diffX = currentX - startX;
+            const diffY = currentY - startY;
+            const threshold = window.innerWidth * 0.3;
+
+            if (
+                (this.position === 'bottom' && diffY > threshold) ||
+                (this.position === 'right' && diffX < -threshold) ||
+                (this.position === 'left' && diffX > threshold)
+            ) {
                 this.close();
             } else {
                 modalContent.style.transform = '';
@@ -469,18 +647,41 @@ export default class Modal {
     validateForm(form) {
         const inputs = form.querySelectorAll('input, select, textarea');
         let isValid = true;
+        const errors = {};
 
         inputs.forEach(input => {
-            if (input.hasAttribute('required') && !input.value.trim()) {
+            const rules = this.validationRules[input.name];
+            if (!rules) return;
+
+            const value = input.value.trim();
+            const fieldErrors = [];
+
+            rules.forEach(rule => {
+                if (rule.required && !value) {
+                    fieldErrors.push('Este campo é obrigatório');
+                }
+                if (rule.minLength && value.length < rule.minLength) {
+                    fieldErrors.push(`Mínimo de ${rule.minLength} caracteres`);
+                }
+                if (rule.maxLength && value.length > rule.maxLength) {
+                    fieldErrors.push(`Máximo de ${rule.maxLength} caracteres`);
+                }
+                if (rule.pattern && !rule.pattern.test(value)) {
+                    fieldErrors.push(rule.message || 'Formato inválido');
+                }
+                if (rule.custom && !rule.custom(value)) {
+                    fieldErrors.push(rule.message || 'Valor inválido');
+                }
+            });
+
+            if (fieldErrors.length > 0) {
                 isValid = false;
-                this.showError(input, 'Este campo é obrigatório');
-            } else if (input.type === 'email' && input.value && !this.isValidEmail(input.value)) {
-                isValid = false;
-                this.showError(input, 'Email inválido');
+                errors[input.name] = fieldErrors;
+                this.showError(input, fieldErrors[0]);
             }
         });
 
-        return isValid;
+        return { isValid, errors };
     }
 
     showError(input, message) {
@@ -690,5 +891,42 @@ export default class Modal {
             onSubmit,
             submitText: existingProject ? 'Salvar Alterações' : 'Criar Projeto'
         });
+    }
+
+    setupCustomFormComponents() {
+        Object.entries(this.customFormComponents).forEach(([selector, component]) => {
+            const container = this.element.querySelector(selector);
+            if (container) {
+                component.render(container);
+            }
+        });
+    }
+
+    showToast(message, type = 'info') {
+        const toast = document.createElement('div');
+        toast.className = `modal-toast toast-${type}`;
+        toast.innerHTML = `
+            <i class="fas ${this.getToastIcon(type)}"></i>
+            <span>${message}</span>
+        `;
+        
+        document.body.appendChild(toast);
+        
+        requestAnimationFrame(() => {
+            toast.classList.add('show');
+            setTimeout(() => {
+                toast.classList.remove('show');
+                setTimeout(() => toast.remove(), 300);
+            }, 3000);
+        });
+    }
+
+    getToastIcon(type) {
+        switch(type) {
+            case 'success': return 'fa-check-circle';
+            case 'error': return 'fa-exclamation-circle';
+            case 'warning': return 'fa-exclamation-triangle';
+            default: return 'fa-info-circle';
+        }
     }
 }
