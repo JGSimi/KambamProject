@@ -136,20 +136,57 @@ input:checked + .slider:before {
     border-radius: 15px;
     padding: 1.5rem;
     cursor: pointer;
-    transition: all 0.3s ease;
+    transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
     border: 1px solid rgba(255, 255, 255, 0.3);
     box-shadow: 
         0 4px 24px -1px rgba(0, 0, 0, 0.06),
         0 0 1px 0 rgba(0, 0, 0, 0.05);
+    position: relative;
+    overflow: hidden;
+}
+
+.project-card::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: linear-gradient(
+        45deg,
+        transparent 0%,
+        rgba(var(--primary-rgb), 0.03) 100%
+    );
+    opacity: 0;
+    transition: opacity 0.4s ease;
 }
 
 .project-card:hover {
-    transform: translateY(-5px);
-    background: rgba(255, 255, 255, 0.8);
+    transform: translateY(-8px) scale(1.02);
+    background: rgba(255, 255, 255, 0.85);
     box-shadow: 
-        0 8px 32px rgba(0, 0, 0, 0.08),
-        0 0 1px 0 rgba(0, 0, 0, 0.05);
-    border: 1px solid rgba(255, 255, 255, 0.4);
+        0 12px 32px rgba(0, 0, 0, 0.12),
+        0 2px 4px rgba(0, 0, 0, 0.08);
+    border: 1px solid rgba(var(--primary-rgb), 0.2);
+}
+
+.project-card:hover::before {
+    opacity: 1;
+}
+
+.project-card:hover .project-title {
+    color: var(--primary-color);
+}
+
+.project-card:hover .fa-chevron-right {
+    transform: translateX(4px);
+    color: var(--primary-color);
+}
+
+.fa-chevron-right {
+    transition: transform 0.3s ease, color 0.3s ease;
+    font-size: 1rem;
+    color: var(--text-secondary);
 }
 
 .project-header {
@@ -320,4 +357,115 @@ input:checked + .slider:before {
 .dark-theme .project-card {
     background: rgba(20, 20, 25, 0.4);
     border: 1px solid rgba(255, 255, 255, 0.05);
+}
+
+.search-container {
+    margin-bottom: 2rem;
+    padding: 0 1rem;
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+}
+
+.search-wrapper {
+    position: relative;
+    flex: 1;
+    max-width: 600px;
+}
+
+.search-wrapper i.fa-search {
+    position: absolute;
+    left: 1rem;
+    top: 50%;
+    transform: translateY(-50%);
+    color: var(--text-secondary);
+    transition: color 0.3s ease;
+}
+
+#projectSearch {
+    width: 100%;
+    padding: 1rem 1rem 1rem 3rem;
+    border: 1px solid var(--border-color);
+    border-radius: 12px;
+    background: var(--card-background);
+    backdrop-filter: blur(10px);
+    -webkit-backdrop-filter: blur(10px);
+    font-size: 1rem;
+    color: var(--text-color);
+    transition: all 0.3s ease;
+}
+
+#projectSearch:focus {
+    outline: none;
+    border-color: var(--primary-color);
+    box-shadow: 0 0 0 4px rgba(var(--primary-rgb), 0.1);
+}
+
+#projectSearch:focus + i.fa-search {
+    color: var(--primary-color);
+}
+
+.search-clear {
+    position: absolute;
+    right: 1rem;
+    top: 50%;
+    transform: translateY(-50%);
+    background: none;
+    border: none;
+    padding: 0.5rem;
+    cursor: pointer;
+    opacity: 0;
+    visibility: hidden;
+    transition: all 0.3s ease;
+}
+
+.search-clear.visible {
+    opacity: 1;
+    visibility: visible;
+}
+
+.search-clear i {
+    color: var(--text-secondary);
+    transition: color 0.3s ease;
+}
+
+.search-clear:hover i {
+    color: var(--primary-color);
+}
+
+/* Ajuste para tema escuro */
+.dark-theme #projectSearch {
+    background: rgba(30, 30, 35, 0.4);
+}
+
+.sort-button {
+    background: var(--card-background);
+    border: 1px solid var(--border-color);
+    border-radius: 12px;
+    padding: 0.8rem 1.2rem;
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    backdrop-filter: blur(10px);
+    -webkit-backdrop-filter: blur(10px);
+}
+
+.sort-button:hover {
+    border-color: var(--primary-color);
+    color: var(--primary-color);
+    transform: translateY(-2px);
+}
+
+.sort-button i {
+    transition: transform 0.3s ease;
+}
+
+.sort-button.descending i {
+    transform: rotate(180deg);
+}
+
+.dark-theme .sort-button {
+    background: rgba(30, 30, 35, 0.4);
 }

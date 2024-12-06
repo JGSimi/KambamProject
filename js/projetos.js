@@ -19,6 +19,10 @@ const projectModal = document.getElementById('projectModal');
 const projectForm = document.getElementById('projectForm');
 const logoutBtn = document.getElementById('logoutBtn');
 const themeToggle = document.getElementById('themeToggle');
+const projectSearch = document.getElementById('projectSearch');
+const clearSearch = document.getElementById('clearSearch');
+const sortButton = document.getElementById('sortButton');
+let isAscending = true;
 
 // Define o nome do usuário
 userName.textContent = user.Name;
@@ -54,13 +58,32 @@ const createProjectCard = (project) => {
     return card;
 };
 
+// Função de ordenação
+const sortProjects = (ascending = true) => {
+    const projects = Array.from(document.querySelectorAll('.project-card'));
+    const sortedProjects = projects.sort((a, b) => {
+        const titleA = a.querySelector('.project-title').textContent.toLowerCase();
+        const titleB = b.querySelector('.project-title').textContent.toLowerCase();
+        return ascending ? 
+            titleA.localeCompare(titleB) : 
+            titleB.localeCompare(titleA);
+    });
+
+    projectsGrid.innerHTML = '';
+    sortedProjects.forEach(project => {
+        projectsGrid.appendChild(project);
+    });
+};
+
 // Carrega os projetos
 const loadProjects = async () => {
     try {
         const projects = await requests.GetBoards();
         projectsGrid.innerHTML = '';
         
-        if (projects.length === 0) {
+        const userProjects = projects.filter(project => project.CreatedBy === user.Id);
+        
+        if (userProjects.length === 0) {
             projectsGrid.innerHTML = `
                 <div class="empty-state">
                     <i class="fas fa-clipboard-list"></i>
@@ -71,12 +94,35 @@ const loadProjects = async () => {
             return;
         }
         
-        projects.forEach(project => {
+        userProjects.forEach(project => {
             projectsGrid.appendChild(createProjectCard(project));
         });
+        
+        // Aplicar ordenação inicial
+        sortProjects(isAscending);
     } catch (error) {
         console.error('Erro ao carregar projetos:', error);
     }
+};
+
+// Função de pesquisa
+const filterProjects = (searchTerm) => {
+    const projects = document.querySelectorAll('.project-card');
+    const normalizedTerm = searchTerm.toLowerCase().trim();
+    
+    projects.forEach(card => {
+        const title = card.querySelector('.project-title').textContent.toLowerCase();
+        const description = card.querySelector('.project-description').textContent.toLowerCase();
+        
+        if (title.includes(normalizedTerm) || description.includes(normalizedTerm)) {
+            card.style.display = '';
+            card.style.animation = 'fadeIn 0.5s ease-out';
+        } else {
+            card.style.display = 'none';
+        }
+    });
+    
+    clearSearch.classList.toggle('visible', searchTerm.length > 0);
 };
 
 // Event Listeners
@@ -124,6 +170,30 @@ themeToggle.checked = theme.current === 'dark';
 themeToggle.addEventListener('change', (e) => {
     const isDark = theme.toggle() === 'dark';
     applyBackground('#007AFF', isDark);
+});
+
+projectSearch.addEventListener('input', (e) => filterProjects(e.target.value));
+
+clearSearch.addEventListener('click', () => {
+    projectSearch.value = '';
+    filterProjects('');
+    projectSearch.focus();
+});
+
+// Atalho de teclado para pesquisa
+document.addEventListener('keydown', (e) => {
+    if ((e.ctrlKey || e.metaKey) && e.key === 'k') {
+        e.preventDefault();
+        projectSearch.focus();
+    }
+});
+
+// Event Listener para o botão de ordenação
+sortButton.addEventListener('click', () => {
+    isAscending = !isAscending;
+    sortButton.classList.toggle('descending', !isAscending);
+    sortButton.querySelector('span').textContent = isAscending ? 'A-Z' : 'Z-A';
+    sortProjects(isAscending);
 });
 
 // Carrega os projetos ao iniciar
