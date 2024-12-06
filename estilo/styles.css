@@ -35,3 +35,582 @@ h1, h2, h3, h4, h5, h6, p, span, div {
                 border-color 0.3s ease,
                 box-shadow 0.3s ease;
 }
+
+/* Sistema de Grid Responsivo */
+.container {
+    width: 100%;
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 0 20px;
+}
+
+.grid {
+    display: grid;
+    gap: 20px;
+    grid-template-columns: repeat(12, 1fr);
+}
+
+/* Utilitários de Flexbox */
+.flex {
+    display: flex;
+}
+
+.flex-wrap {
+    flex-wrap: wrap;
+}
+
+.flex-center {
+    justify-content: center;
+    align-items: center;
+}
+
+.flex-between {
+    justify-content: space-between;
+}
+
+/* Classes de Espaçamento Responsivo */
+.p-responsive {
+    padding: clamp(1rem, 3vw, 2rem);
+}
+
+.m-responsive {
+    margin: clamp(1rem, 3vw, 2rem);
+}
+
+/* Breakpoints Responsivos */
+@media screen and (max-width: 1200px) {
+    .grid {
+        grid-template-columns: repeat(8, 1fr);
+    }
+    
+    .container {
+        max-width: 960px;
+    }
+}
+
+@media screen and (max-width: 992px) {
+    .grid {
+        grid-template-columns: repeat(6, 1fr);
+    }
+    
+    .container {
+        max-width: 720px;
+    }
+    
+    html {
+        font-size: 95%;
+    }
+}
+
+@media screen and (max-width: 768px) {
+    .grid {
+        grid-template-columns: repeat(4, 1fr);
+    }
+    
+    .container {
+        max-width: 540px;
+    }
+    
+    html {
+        font-size: 90%;
+    }
+    
+    .hide-mobile {
+        display: none !important;
+    }
+}
+
+@media screen and (max-width: 576px) {
+    .grid {
+        grid-template-columns: repeat(2, 1fr);
+        gap: 15px;
+    }
+    
+    .container {
+        padding: 0 15px;
+    }
+    
+    html {
+        font-size: 85%;
+    }
+}
+
+/* Melhorias de Acessibilidade */
+@media (prefers-reduced-motion: reduce) {
+    * {
+        animation-duration: 0.01ms !important;
+        animation-iteration-count: 1 !important;
+        transition-duration: 0.01ms !important;
+        scroll-behavior: auto !important;
+    }
+}
+
+/* Glass Morphism Aprimorado */
+.glass {
+    background: rgba(255, 255, 255, 0.1);
+    backdrop-filter: blur(10px);
+    -webkit-backdrop-filter: blur(10px);
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    box-shadow: 0 8px 32px 0 rgba(31, 38, 135, 0.15);
+}
+
+.glass-dark {
+    background: rgba(0, 0, 0, 0.2);
+    backdrop-filter: blur(10px);
+    -webkit-backdrop-filter: blur(10px);
+    border: 1px solid rgba(255, 255, 255, 0.05);
+}
+
+/* Animações Aprimoradas */
+@keyframes fadeInUp {
+    from {
+        opacity: 0;
+        transform: translateY(20px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+.fade-in-up {
+    animation: fadeInUp 0.5s ease forwards;
+}
+
+/* Melhorias de Touch */
+@media (hover: none) {
+    .touch-target {
+        min-height: 44px;
+        min-width: 44px;
+        padding: 12px;
+    }
+}
+
+/* Utilitários de Texto Responsivo */
+.text-responsive {
+    font-size: clamp(1rem, 2.5vw, 1.5rem);
+    line-height: 1.5;
+}
+
+.heading-responsive {
+    font-size: clamp(1.5rem, 5vw, 3rem);
+    line-height: 1.2;
+}
+
+/* Estilos Responsivos para Formulários */
+.responsive-form {
+    display: flex;
+    flex-direction: column;
+    gap: 1.5rem;
+}
+
+.responsive-form .form-group {
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+}
+
+.responsive-form input,
+.responsive-form textarea,
+.responsive-form select {
+    padding: 0.75rem;
+    border: 1px solid var(--border-color);
+    border-radius: 8px;
+    background: var(--card-background);
+    color: var(--text-color);
+    font-size: 1rem;
+    transition: all 0.3s ease;
+}
+
+.responsive-form input:focus,
+.responsive-form textarea:focus,
+.responsive-form select:focus {
+    border-color: var(--primary-color);
+    box-shadow: 0 0 0 2px rgba(var(--primary-rgb), 0.2);
+    outline: none;
+}
+
+/* Melhorias para Touch */
+.touch-target {
+    min-height: 44px;
+    min-width: 44px;
+    padding: 12px;
+    cursor: pointer;
+}
+
+.touch-target.active {
+    transform: scale(0.95);
+    opacity: 0.8;
+}
+
+/* Animações Suaves */
+.fade-in-up {
+    animation: fadeInUp 0.5s ease forwards;
+}
+
+@keyframes fadeInUp {
+    from {
+        opacity: 0;
+        transform: translateY(20px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+/* Melhorias para Modal Mobile */
+.modal-mobile {
+    position: fixed;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    margin: 0 !important;
+    border-radius: 20px 20px 0 0 !important;
+    max-height: 85vh;
+    overflow-y: auto;
+}
+
+.modal-mobile .modal-header {
+    position: sticky;
+    top: 0;
+    background: inherit;
+    backdrop-filter: blur(10px);
+    z-index: 1;
+}
+
+.modal-mobile .modal-actions {
+    position: sticky;
+    bottom: 0;
+    background: inherit;
+    backdrop-filter: blur(10px);
+    padding: 1rem;
+    border-top: 1px solid var(--border-color);
+}
+
+/* Melhorias para Desktop */
+@media (min-width: 992px) {
+    .kanban-column {
+        min-width: 300px;
+        max-width: 400px;
+    }
+
+    .task-card {
+        transition: transform 0.3s ease, box-shadow 0.3s ease;
+    }
+
+    .task-card:hover {
+        transform: translateY(-2px) scale(1.02);
+        box-shadow: 0 8px 24px rgba(0, 0, 0, 0.12);
+    }
+
+    .modal-content {
+        max-width: 600px;
+        margin: 2rem auto;
+        border-radius: 16px;
+    }
+}
+
+/* Melhorias para Tablet */
+@media (min-width: 768px) and (max-width: 991px) {
+    .kanban-column {
+        min-width: 280px;
+        max-width: 350px;
+    }
+
+    .task-card {
+        padding: 1rem;
+    }
+}
+
+/* Melhorias para Mobile */
+@media (max-width: 767px) {
+    .kanban-column {
+        min-width: 100%;
+        margin: 0 0 1rem 0;
+    }
+
+    .task-card {
+        margin: 0.5rem 0;
+    }
+
+    .column-header {
+        padding: 0.75rem;
+    }
+
+    .task-actions {
+        opacity: 1;
+        position: static;
+        padding-top: 0.5rem;
+        margin-top: 0.5rem;
+        border-top: 1px solid var(--border-color);
+    }
+}
+
+/* Melhorias de Acessibilidade */
+@media (prefers-reduced-motion: reduce) {
+    * {
+        animation-duration: 0.01ms !important;
+        animation-iteration-count: 1 !important;
+        transition-duration: 0.01ms !important;
+        scroll-behavior: auto !important;
+    }
+}
+
+/* Melhorias de Performance */
+.hardware-accelerated {
+    transform: translateZ(0);
+    backface-visibility: hidden;
+    perspective: 1000px;
+}
+
+/* Melhorias de Scroll */
+.custom-scrollbar {
+    scrollbar-width: thin;
+    scrollbar-color: var(--primary-color) transparent;
+}
+
+.custom-scrollbar::-webkit-scrollbar {
+    width: 6px;
+}
+
+.custom-scrollbar::-webkit-scrollbar-track {
+    background: transparent;
+}
+
+.custom-scrollbar::-webkit-scrollbar-thumb {
+    background-color: var(--primary-color);
+    border-radius: 3px;
+}
+
+/* Utilitários de Espaçamento */
+.m-0 { margin: 0; }
+.p-0 { padding: 0; }
+.mt-1 { margin-top: 0.5rem; }
+.mb-1 { margin-bottom: 0.5rem; }
+.my-1 { margin-top: 0.5rem; margin-bottom: 0.5rem; }
+.mx-1 { margin-left: 0.5rem; margin-right: 0.5rem; }
+
+/* Utilitários de Flexbox */
+.flex-1 { flex: 1; }
+.flex-grow { flex-grow: 1; }
+.flex-shrink { flex-shrink: 1; }
+.flex-no-shrink { flex-shrink: 0; }
+
+/* Utilitários de Grid */
+.grid-auto-fit {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+    gap: 1rem;
+}
+
+.grid-auto-fill {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+    gap: 1rem;
+}
+
+/* Utilitários de Visibilidade */
+.hide-mobile {
+    display: none;
+}
+
+.hide-desktop {
+    display: none;
+}
+
+@media (min-width: 768px) {
+    .hide-mobile {
+        display: initial;
+    }
+    
+    .hide-desktop {
+        display: none !important;
+    }
+}
+
+@media (max-width: 767px) {
+    .hide-mobile {
+        display: none !important;
+    }
+    
+    .hide-desktop {
+        display: initial;
+    }
+}
+
+/* Estilos do Menu Lateral */
+.menu-lateral {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 280px;
+    height: 100vh;
+    background: var(--card-background);
+    border-right: 1px solid var(--border-color);
+    display: flex;
+    flex-direction: column;
+    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    z-index: 1000;
+    overflow: hidden;
+}
+
+/* Estado Mobile do Menu */
+.menu-lateral.menu-mobile {
+    top: auto;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    width: 100%;
+    height: auto;
+    border-right: none;
+    border-top: 1px solid var(--border-color);
+    background: var(--card-background);
+    backdrop-filter: blur(10px);
+    -webkit-backdrop-filter: blur(10px);
+}
+
+/* Cabeçalho do Menu */
+.menu-header {
+    padding: 1rem;
+    border-bottom: 1px solid var(--border-color);
+    background: inherit;
+    backdrop-filter: blur(10px);
+    -webkit-backdrop-filter: blur(10px);
+}
+
+/* Lista de Projetos */
+.projects-list {
+    flex: 1;
+    overflow-y: auto;
+    padding: 1rem;
+    transition: transform 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+/* Menu Mobile */
+.mobile-menu {
+    display: none;
+    padding: 0.75rem 1rem;
+    gap: 1.5rem;
+    justify-content: space-around;
+    background: inherit;
+    backdrop-filter: blur(10px);
+    -webkit-backdrop-filter: blur(10px);
+    border-top: 1px solid var(--border-color);
+}
+
+.menu-mobile .mobile-menu {
+    display: flex;
+}
+
+/* Botões do Menu Mobile */
+.mobile-menu-btn {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 0.25rem;
+    padding: 0.5rem;
+    border: none;
+    background: none;
+    color: var(--text-color);
+    font-size: 1.25rem;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    position: relative;
+}
+
+.mobile-menu-btn span {
+    font-size: 0.75rem;
+    transition: all 0.3s ease;
+}
+
+.mobile-menu-btn:hover,
+.mobile-menu-btn.hover {
+    color: var(--primary-color);
+    transform: translateY(-2px);
+}
+
+.mobile-menu-btn.active {
+    transform: scale(0.95);
+    opacity: 0.8;
+}
+
+/* Lista de Projetos em Mobile */
+.menu-mobile .projects-list {
+    display: none;
+    position: fixed;
+    bottom: 100%;
+    left: 0;
+    right: 0;
+    max-height: 70vh;
+    background: var(--card-background);
+    border-radius: 20px 20px 0 0;
+    box-shadow: 0 -4px 24px rgba(0, 0, 0, 0.1);
+    padding: 1rem;
+    transform: translateY(100%);
+    opacity: 0;
+    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.menu-mobile.show-projects .projects-list {
+    display: block;
+    transform: translateY(0);
+    opacity: 1;
+}
+
+/* Overlay para Mobile */
+.menu-mobile.show-projects::before {
+    content: '';
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: rgba(0, 0, 0, 0.5);
+    backdrop-filter: blur(4px);
+    -webkit-backdrop-filter: blur(4px);
+    z-index: -1;
+    opacity: 0;
+    transition: opacity 0.3s ease;
+}
+
+.menu-mobile.show-projects::before {
+    opacity: 1;
+}
+
+/* Ajustes para o Body */
+body.has-mobile-menu {
+    padding-bottom: 60px;
+}
+
+body.modal-open {
+    overflow: hidden;
+}
+
+/* Animações */
+@keyframes slideUpIn {
+    from {
+        transform: translateY(100%);
+        opacity: 0;
+    }
+    to {
+        transform: translateY(0);
+        opacity: 1;
+    }
+}
+
+@keyframes fadeIn {
+    from {
+        opacity: 0;
+    }
+    to {
+        opacity: 1;
+    }
+}
+
+/* Melhorias de Performance */
+.menu-lateral {
+    will-change: transform;
+    transform: translateZ(0);
+    backface-visibility: hidden;
+}

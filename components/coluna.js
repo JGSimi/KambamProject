@@ -8,28 +8,29 @@ export default class Coluna {
 
     render() {
         const columnElement = document.createElement('div');
-        columnElement.className = 'kanban-column';
+        columnElement.className = 'kanban-column glass fade-in-up';
         columnElement.dataset.columnId = this.column.Id;
         
         columnElement.innerHTML = `
-            <div class="column-header">
-                <h3 class="column-title">${this.column.Name}</h3>
-                <div class="column-actions">
-                    <button class="column-btn add-task" title="Adicionar Tarefa">
+            <div class="column-header p-responsive flex flex-between flex-center">
+                <h3 class="column-title text-responsive">${this.column.Name}</h3>
+                <div class="column-actions flex flex-center">
+                    <button class="column-btn add-task touch-target" title="Adicionar Tarefa">
                         <i class="fas fa-plus"></i>
                     </button>
-                    <button class="column-btn edit-column" title="Editar Coluna">
+                    <button class="column-btn edit-column touch-target" title="Editar Coluna">
                         <i class="fas fa-edit"></i>
                     </button>
-                    <button class="column-btn delete-column" title="Excluir Coluna">
+                    <button class="column-btn delete-column touch-target" title="Excluir Coluna">
                         <i class="fas fa-trash"></i>
                     </button>
                 </div>
             </div>
-            <div class="task-list" data-column-id="${this.column.Id}"></div>
+            <div class="task-list p-responsive" data-column-id="${this.column.Id}"></div>
         `;
 
         this.setupEventListeners(columnElement);
+        this.setupResponsiveLayout(columnElement);
         return columnElement;
     }
 
@@ -44,6 +45,13 @@ export default class Coluna {
         deleteColumnBtn.addEventListener('click', () => this.onDelete(this.column.Id));
         
         this.setupDragAndDrop(taskList);
+        
+        // Adiciona feedback visual para interações touch
+        const buttons = element.querySelectorAll('.column-btn');
+        buttons.forEach(btn => {
+            btn.addEventListener('touchstart', () => btn.classList.add('active'));
+            btn.addEventListener('touchend', () => btn.classList.remove('active'));
+        });
     }
 
     setupDragAndDrop(taskList) {
@@ -64,5 +72,21 @@ export default class Coluna {
                 this.onTaskDropped(taskId, this.column.Id);
             }
         });
+    }
+
+    setupResponsiveLayout(element) {
+        // Observador de redimensionamento para ajustes responsivos
+        const resizeObserver = new ResizeObserver(entries => {
+            for (let entry of entries) {
+                const width = entry.contentRect.width;
+                if (width < 576) {
+                    element.classList.add('column-mobile');
+                } else {
+                    element.classList.remove('column-mobile');
+                }
+            }
+        });
+
+        resizeObserver.observe(element);
     }
 }
