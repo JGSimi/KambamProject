@@ -164,6 +164,11 @@
     flex-direction: column;
     gap: 1rem;
     min-height: 100px;
+    transition: background-color 0.3s ease;
+}
+
+.task-list.drag-over {
+    background: rgba(var(--primary-rgb), 0.1);
 }
 
 .task-card {
@@ -190,6 +195,8 @@
 .task-card.dragging {
     opacity: 0.5;
     cursor: grabbing;
+    transform: scale(1.05);
+    box-shadow: 0 8px 24px rgba(0, 0, 0, 0.15);
 }
 
 .task-title {

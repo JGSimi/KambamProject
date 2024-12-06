@@ -42,7 +42,8 @@ async function loadBoard() {
                 column,
                 handleDeleteColumn,
                 handleAddTask,
-                handleEditColumn
+                handleEditColumn,
+                handleTaskMove
             );
             
             const colunaElement = colunaComponent.render();
@@ -213,3 +214,23 @@ backButton.addEventListener('click', () => {
 
 // Inicialização
 loadBoard();
+
+// Adicionar após as declarações de handlers existentes
+async function handleTaskMove(taskId, newColumnId) {
+    try {
+        const tasks = await requests.GetTasksByColumnId(newColumnId);
+        const task = tasks.find(t => t.Id === taskId);
+        
+        if (task && task.ColumnId !== newColumnId) {
+            await requests.UpdateTask({
+                ...task,
+                ColumnId: newColumnId,
+                UpdatedBy: user.Id
+            });
+            loadBoard();
+        }
+    } catch (error) {
+        console.error('Erro ao mover tarefa:', error);
+        loadBoard(); // Recarrega o board em caso de erro
+    }
+}

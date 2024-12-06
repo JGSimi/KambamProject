@@ -1,92 +1,86 @@
 export default class Coluna {
-    constructor(column, onDelete, onAddTask, onEdit) {
+    constructor(column, onDelete, onAddTask, onEdit, onTaskMove) {
         this.column = column;
         this.onDelete = onDelete;
         this.onAddTask = onAddTask;
         this.onEdit = onEdit;
+        this.onTaskMove = onTaskMove;
     }
 
     render() {
         const columnElement = document.createElement('div');
-        columnElement.className = 'kanban-column glass fade-in-up';
+        columnElement.className = 'kanban-column';
         columnElement.dataset.columnId = this.column.Id;
         
         columnElement.innerHTML = `
-            <div class="column-header p-responsive flex flex-between flex-center">
-                <h3 class="column-title text-responsive">${this.column.Name}</h3>
-                <div class="column-actions flex flex-center">
-                    <button class="column-btn add-task touch-target" title="Adicionar Tarefa">
-                        <i class="fas fa-plus"></i>
-                    </button>
-                    <button class="column-btn edit-column touch-target" title="Editar Coluna">
+            <div class="column-header">
+                <h3>${this.column.Name}</h3>
+                <div class="column-actions">
+                    <button class="column-btn edit-btn" title="Editar coluna">
                         <i class="fas fa-edit"></i>
                     </button>
-                    <button class="column-btn delete-column touch-target" title="Excluir Coluna">
-                        <i class="fas fa-trash"></i>
+                    <button class="column-btn delete-btn" title="Excluir coluna">
+                        <i class="fas fa-trash-alt"></i>
                     </button>
                 </div>
             </div>
-            <div class="task-list p-responsive" data-column-id="${this.column.Id}"></div>
+            <div class="task-list"></div>
+            <button class="add-task-btn">
+                <i class="fas fa-plus"></i>
+                Adicionar Tarefa
+            </button>
         `;
 
-        this.setupEventListeners(columnElement);
-        this.setupResponsiveLayout(columnElement);
+        // Event Listeners para drag and drop
+        const taskList = columnElement.querySelector('.task-list');
+        
+        taskList.addEventListener('dragover', (e) => {
+            e.preventDefault();
+            const draggable = document.querySelector('.dragging');
+            if (!draggable) return;
+            
+            const afterElement = this.getDragAfterElement(taskList, e.clientY);
+            if (afterElement) {
+                taskList.insertBefore(draggable, afterElement);
+            } else {
+                taskList.appendChild(draggable);
+            }
+        });
+
+        taskList.addEventListener('drop', async (e) => {
+            e.preventDefault();
+            const taskId = e.dataTransfer.getData('text/plain');
+            const newColumnId = this.column.Id;
+            
+            if (this.onTaskMove) {
+                await this.onTaskMove(taskId, newColumnId);
+            }
+        });
+
+        // Botões de ação
+        const addTaskBtn = columnElement.querySelector('.add-task-btn');
+        const editBtn = columnElement.querySelector('.edit-btn');
+        const deleteBtn = columnElement.querySelector('.delete-btn');
+
+        addTaskBtn.addEventListener('click', () => this.onAddTask(this.column.Id));
+        editBtn.addEventListener('click', () => this.onEdit(this.column));
+        deleteBtn.addEventListener('click', () => this.onDelete(this.column.Id));
+
         return columnElement;
     }
 
-    setupEventListeners(element) {
-        const addTaskBtn = element.querySelector('.add-task');
-        const editColumnBtn = element.querySelector('.edit-column');
-        const deleteColumnBtn = element.querySelector('.delete-column');
-        const taskList = element.querySelector('.task-list');
-        
-        addTaskBtn.addEventListener('click', () => this.onAddTask(this.column.Id));
-        editColumnBtn.addEventListener('click', () => this.onEdit(this.column));
-        deleteColumnBtn.addEventListener('click', () => this.onDelete(this.column.Id));
-        
-        this.setupDragAndDrop(taskList);
-        
-        // Adiciona feedback visual para interações touch
-        const buttons = element.querySelectorAll('.column-btn');
-        buttons.forEach(btn => {
-            btn.addEventListener('touchstart', () => btn.classList.add('active'));
-            btn.addEventListener('touchend', () => btn.classList.remove('active'));
-        });
-    }
+    getDragAfterElement(container, y) {
+        const draggableElements = [...container.querySelectorAll('.task-card:not(.dragging)')];
 
-    setupDragAndDrop(taskList) {
-        taskList.addEventListener('dragover', (e) => {
-            e.preventDefault();
-            taskList.classList.add('drag-over');
-        });
-        
-        taskList.addEventListener('dragleave', () => {
-            taskList.classList.remove('drag-over');
-        });
-        
-        taskList.addEventListener('drop', (e) => {
-            e.preventDefault();
-            taskList.classList.remove('drag-over');
-            const taskId = e.dataTransfer.getData('text/plain');
-            if (taskId) {
-                this.onTaskDropped(taskId, this.column.Id);
+        return draggableElements.reduce((closest, child) => {
+            const box = child.getBoundingClientRect();
+            const offset = y - box.top - box.height / 2;
+
+            if (offset < 0 && offset > closest.offset) {
+                return { offset: offset, element: child };
+            } else {
+                return closest;
             }
-        });
-    }
-
-    setupResponsiveLayout(element) {
-        // Observador de redimensionamento para ajustes responsivos
-        const resizeObserver = new ResizeObserver(entries => {
-            for (let entry of entries) {
-                const width = entry.contentRect.width;
-                if (width < 576) {
-                    element.classList.add('column-mobile');
-                } else {
-                    element.classList.remove('column-mobile');
-                }
-            }
-        });
-
-        resizeObserver.observe(element);
+        }, { offset: Number.NEGATIVE_INFINITY }).element;
     }
 }
