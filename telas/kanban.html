@@ -1,0 +1,102 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>TaskBoard - Projeto</title>
+    <link rel="stylesheet" href="../estilo/styles.css">
+    <link rel="stylesheet" href="../estilo/kanban.css">
+    <link rel="stylesheet" href="../estilo/modal.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+</head>
+<body>
+    <div class="app-container">
+        <aside class="sidebar">
+            <div class="sidebar-header">
+                <button id="backButton" class="back-button">
+                    <i class="fas fa-arrow-left"></i>
+                </button>
+                <h2 id="projectName">Carregando...</h2>
+            </div>
+            
+            <div class="board-info">
+                <div class="info-item">
+                    <i class="fas fa-columns"></i>
+                    <span id="columnCount">0 colunas</span>
+                </div>
+                <div class="info-item">
+                    <i class="fas fa-tasks"></i>
+                    <span id="taskCount">0 tarefas</span>
+                </div>
+            </div>
+
+            <div class="board-actions">
+                <button id="addColumnBtn" class="action-btn">
+                    <i class="fas fa-plus"></i>
+                    Nova Coluna
+                </button>
+                <button id="editBoardBtn" class="action-btn">
+                    <i class="fas fa-edit"></i>
+                    Editar Projeto
+                </button>
+                <button id="deleteBoardBtn" class="action-btn danger">
+                    <i class="fas fa-trash-alt"></i>
+                    Excluir Projeto
+                </button>
+            </div>
+        </aside>
+
+        <main class="main-content">
+            <div class="kanban-board" id="kanbanBoard">
+                <!-- Colunas serão inseridas aqui -->
+            </div>
+        </main>
+    </div>
+
+    <!-- Modal de Nova Coluna -->
+    <div id="columnModal" class="modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h2>Nova Coluna</h2>
+                <button class="close-btn"><i class="fas fa-times"></i></button>
+            </div>
+            <form id="columnForm">
+                <div class="form-group">
+                    <label for="columnName">Nome da Coluna</label>
+                    <input type="text" id="columnName" required>
+                </div>
+                <div class="modal-actions">
+                    <button type="button" class="cancel-btn">Cancelar</button>
+                    <button type="submit" class="submit-btn">Criar Coluna</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <!-- Modal de Nova Tarefa -->
+    <div id="taskModal" class="modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h2>Nova Tarefa</h2>
+                <button class="close-btn"><i class="fas fa-times"></i></button>
+            </div>
+            <form id="taskForm">
+                <div class="form-group">
+                    <label for="taskTitle">Título</label>
+                    <input type="text" id="taskTitle" required>
+                </div>
+                <div class="form-group">
+                    <label for="taskDescription">Descrição</label>
+                    <textarea id="taskDescription" rows="3"></textarea>
+                </div>
+                <div class="modal-actions">
+                    <button type="button" class="cancel-btn">Cancelar</button>
+                    <button type="submit" class="submit-btn">Criar Tarefa</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <script type="module" src="../js/kanban.js"></script>
+</body>
+</html>

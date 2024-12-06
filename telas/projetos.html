@@ -1,0 +1,81 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>TaskBoard - Projetos</title>
+    <link rel="stylesheet" href="../estilo/styles.css">
+    <link rel="stylesheet" href="../estilo/projetos.css">
+    <link rel="stylesheet" href="../estilo/modal.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+</head>
+<body>
+    <div class="app-container">
+        <aside class="sidebar">
+            <div class="sidebar-header">
+                <i class="fas fa-tasks"></i>
+                <h2>TaskBoard</h2>
+            </div>
+            <div class="user-info">
+                <i class="fas fa-user-circle"></i>
+                <span id="userName">Carregando...</span>
+            </div>
+            <div class="theme-toggle">
+                <i class="fas fa-moon"></i>
+                <label class="switch">
+                    <input type="checkbox" id="themeToggle">
+                    <span class="slider"></span>
+                </label>
+            </div>
+            <button id="logoutBtn" class="logout-btn">
+                <i class="fas fa-sign-out-alt"></i>
+                <span>Sair</span>
+            </button>
+        </aside>
+
+        <main class="main-content">
+            <header class="content-header">
+                <h1>Meus Projetos</h1>
+                <button id="newProjectBtn" class="new-project-btn">
+                    <i class="fas fa-plus"></i>
+                    Novo Projeto
+                </button>
+            </header>
+
+            <div class="projects-grid" id="projectsGrid">
+                <!-- Projetos serão inseridos aqui dinamicamente -->
+            </div>
+        </main>
+    </div>
+
+    <!-- Modal de Novo Projeto -->
+    <div id="projectModal" class="modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h2>Novo Projeto</h2>
+                <button class="close-btn"><i class="fas fa-times"></i></button>
+            </div>
+            <form id="projectForm">
+                <div class="form-group">
+                    <label for="projectName">Nome do Projeto</label>
+                    <input type="text" id="projectName" required>
+                </div>
+                <div class="form-group">
+                    <label for="projectDescription">Descrição</label>
+                    <textarea id="projectDescription" rows="3"></textarea>
+                </div>
+                <div class="form-group">
+                    <label for="projectColor">Cor do Projeto</label>
+                    <input type="color" id="projectColor" value="#007AFF">
+                </div>
+                <div class="modal-actions">
+                    <button type="button" class="cancel-btn">Cancelar</button>
+                    <button type="submit" class="submit-btn">Criar Projeto</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <script type="module" src="../js/projetos.js"></script>
+</body>
+</html>

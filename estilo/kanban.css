@@ -1,0 +1,242 @@
+.app-container {
+    display: flex;
+    min-height: 100vh;
+}
+
+.sidebar {
+    width: 300px;
+    background: var(--card-background);
+    backdrop-filter: blur(10px);
+    padding: 2rem;
+    display: flex;
+    flex-direction: column;
+    border-right: 1px solid var(--border-color);
+}
+
+.sidebar-header {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+    margin-bottom: 2rem;
+}
+
+.back-button {
+    background: none;
+    border: none;
+    color: var(--primary-color);
+    cursor: pointer;
+    padding: 0.5rem;
+    border-radius: 50%;
+    transition: all 0.3s ease;
+}
+
+.back-button:hover {
+    background: rgba(0, 122, 255, 0.1);
+    transform: translateX(-2px);
+}
+
+.board-info {
+    margin: 2rem 0;
+    padding: 1rem 0;
+    border-top: 1px solid var(--border-color);
+    border-bottom: 1px solid var(--border-color);
+}
+
+.info-item {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    margin: 0.5rem 0;
+    color: var(--text-secondary);
+}
+
+.info-item i {
+    color: var(--primary-color);
+}
+
+.board-actions {
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+    margin-top: auto;
+}
+
+.action-btn {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    padding: 0.75rem 1rem;
+    border: none;
+    border-radius: 8px;
+    background: var(--background-color);
+    color: var(--text-color);
+    cursor: pointer;
+    transition: all 0.3s ease;
+}
+
+.action-btn:hover {
+    transform: translateY(-2px);
+    background: var(--primary-color);
+    color: white;
+}
+
+.action-btn.danger {
+    color: #ff3b30;
+}
+
+.action-btn.danger:hover {
+    background: #ff3b30;
+    color: white;
+}
+
+.main-content {
+    flex: 1;
+    padding: 2rem;
+    overflow-x: auto;
+}
+
+.kanban-board {
+    display: flex;
+    gap: 1.5rem;
+    min-height: calc(100vh - 4rem);
+    padding-bottom: 2rem;
+}
+
+.kanban-column {
+    min-width: 300px;
+    background: var(--card-background);
+    border-radius: 12px;
+    padding: 1rem;
+    display: flex;
+    flex-direction: column;
+}
+
+.column-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 1rem;
+    padding-bottom: 0.5rem;
+    border-bottom: 2px solid var(--border-color);
+}
+
+.column-title {
+    font-weight: 600;
+    color: var(--text-color);
+}
+
+.column-actions {
+    display: flex;
+    gap: 0.5rem;
+}
+
+.column-btn {
+    background: none;
+    border: none;
+    color: var(--text-secondary);
+    cursor: pointer;
+    padding: 0.25rem;
+    border-radius: 4px;
+    transition: all 0.3s ease;
+}
+
+.column-btn:hover {
+    color: var(--primary-color);
+    background: rgba(0, 122, 255, 0.1);
+}
+
+.task-list {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+    min-height: 100px;
+}
+
+.task-card {
+    background: var(--background-color);
+    border-radius: 8px;
+    padding: 1rem;
+    cursor: grab;
+    transition: all 0.3s ease;
+    animation: slideIn 0.3s ease-out;
+}
+
+.task-card:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 4px 12px var(--shadow-color);
+}
+
+.task-card.dragging {
+    opacity: 0.5;
+    cursor: grabbing;
+}
+
+.task-title {
+    font-weight: 500;
+    margin-bottom: 0.5rem;
+}
+
+.task-description {
+    font-size: 0.9rem;
+    color: var(--text-secondary);
+}
+
+.add-task-btn {
+    margin-top: 1rem;
+    padding: 0.75rem;
+    border: 2px dashed var(--border-color);
+    border-radius: 8px;
+    background: none;
+    color: var(--text-secondary);
+    cursor: pointer;
+    transition: all 0.3s ease;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0.5rem;
+}
+
+.add-task-btn:hover {
+    border-color: var(--primary-color);
+    color: var(--primary-color);
+    background: rgba(0, 122, 255, 0.1);
+}
+
+@keyframes slideIn {
+    from {
+        opacity: 0;
+        transform: translateY(20px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+/* Estilo para quando estiver arrastando sobre uma coluna */
+.kanban-column.drag-over {
+    background: rgba(0, 122, 255, 0.1);
+    border: 2px dashed var(--primary-color);
+}
+
+/* Responsividade */
+@media (max-width: 768px) {
+    .app-container {
+        flex-direction: column;
+    }
+
+    .sidebar {
+        width: 100%;
+        border-right: none;
+        border-bottom: 1px solid var(--border-color);
+    }
+
+    .main-content {
+        padding: 1rem;
+    }
+
+    .kanban-column {
+        min-width: 280px;
+    }
+}
