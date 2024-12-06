@@ -240,24 +240,261 @@
     border: 2px dashed var(--primary-color);
 }
 
-/* Responsividade */
+/* Responsividade Aprimorada */
+@media (max-width: 1200px) {
+    .kanban-column {
+        min-width: 280px;
+    }
+    
+    .main-content {
+        padding: 1.5rem;
+    }
+    
+    .kanban-board {
+        gap: 1rem;
+    }
+}
+
+@media (max-width: 992px) {
+    .kanban-column {
+        min-width: 260px;
+    }
+    
+    .sidebar {
+        width: 250px;
+        padding: 1.5rem;
+    }
+    
+    .board-actions {
+        gap: 0.75rem;
+    }
+}
+
 @media (max-width: 768px) {
     .app-container {
         flex-direction: column;
     }
-
+    
     .sidebar {
         width: 100%;
+        position: sticky;
+        top: 0;
+        z-index: 100;
+        padding: 1rem;
         border-right: none;
         border-bottom: 1px solid var(--border-color);
+        flex-direction: row;
+        align-items: center;
+        justify-content: space-between;
+        backdrop-filter: blur(20px) saturate(200%);
     }
-
+    
+    .board-info {
+        display: none;
+    }
+    
+    .board-actions {
+        flex-direction: row;
+        margin: 0;
+        gap: 1rem;
+    }
+    
     .main-content {
         padding: 1rem;
+        overflow-x: auto;
+        -webkit-overflow-scrolling: touch;
+    }
+    
+    .kanban-board {
+        flex-wrap: nowrap;
+        padding: 1rem 0.5rem;
+        gap: 1rem;
+        align-items: flex-start;
+        min-height: calc(100vh - 80px);
+    }
+    
+    .kanban-column {
+        min-width: 280px;
+        max-width: 85vw;
+        height: calc(100vh - 100px);
+        overflow-y: auto;
+        -webkit-overflow-scrolling: touch;
+    }
+    
+    .task-card {
+        touch-action: pan-y pinch-zoom;
+    }
+    
+    .column-header {
+        position: sticky;
+        top: 0;
+        background: inherit;
+        z-index: 10;
+        padding: 1rem;
+        margin: -1rem -1rem 1rem -1rem;
+        backdrop-filter: blur(10px);
+    }
+    
+    .add-task-btn {
+        position: sticky;
+        bottom: 0;
+        background: var(--card-background);
+        margin: 0.5rem -1rem -1rem -1rem;
+        border-radius: 0 0 12px 12px;
+        padding: 1rem;
+    }
+}
+
+@media (max-width: 576px) {
+    .kanban-column {
+        min-width: 85vw;
+        max-width: 85vw;
+    }
+    
+    .sidebar-header {
+        flex-wrap: wrap;
+        gap: 0.5rem;
+    }
+    
+    .board-actions {
+        display: none;
+    }
+    
+    .mobile-menu-btn {
+        display: block;
+        background: none;
+        border: none;
+        color: var(--text-color);
+        padding: 0.5rem;
+        cursor: pointer;
+    }
+    
+    .mobile-actions {
+        display: none;
+        position: fixed;
+        bottom: 0;
+        left: 0;
+        right: 0;
+        background: var(--card-background);
+        padding: 1rem;
+        border-top: 1px solid var(--border-color);
+        backdrop-filter: blur(20px);
+        z-index: 1000;
+        animation: slideUpIn 0.3s ease-out;
+    }
+    
+    .mobile-actions.show {
+        display: flex;
+        flex-direction: column;
+        gap: 0.5rem;
+    }
+}
+
+/* Melhorias de Scroll */
+.kanban-column {
+    scrollbar-width: thin;
+    scrollbar-color: var(--border-color) transparent;
+}
+
+.kanban-column::-webkit-scrollbar {
+    width: 4px;
+}
+
+.kanban-column::-webkit-scrollbar-track {
+    background: transparent;
+}
+
+.kanban-column::-webkit-scrollbar-thumb {
+    background-color: var(--border-color);
+    border-radius: 4px;
+}
+
+/* Melhorias de Touch */
+@media (hover: none) {
+    .kanban-board {
+        touch-action: pan-x pinch-zoom;
+        -webkit-overflow-scrolling: touch;
+    }
+    
+    .task-card {
+        user-select: none;
+        -webkit-user-select: none;
+    }
+    
+    .task-card:active {
+        transform: scale(0.98);
+    }
+    
+    .add-task-btn:active {
+        transform: scale(0.95);
+    }
+}
+
+/* Animações Otimizadas */
+@keyframes slideUpIn {
+    from {
+        transform: translateY(100%);
+        opacity: 0;
+    }
+    to {
+        transform: translateY(0);
+        opacity: 1;
+    }
+}
+
+@keyframes fadeIn {
+    from {
+        opacity: 0;
+    }
+    to {
+        opacity: 1;
+    }
+}
+
+/* Animações Aprimoradas */
+@keyframes columnHover {
+    0% {
+        box-shadow: 0 4px 24px -1px rgba(0, 0, 0, 0.1);
+    }
+    50% {
+        box-shadow: 0 8px 32px -1px rgba(0, 0, 0, 0.15);
+    }
+    100% {
+        box-shadow: 0 4px 24px -1px rgba(0, 0, 0, 0.1);
+    }
+}
+
+.kanban-column {
+    transition: transform 0.3s cubic-bezier(0.16, 1, 0.3, 1),
+                box-shadow 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.kanban-column:hover {
+    animation: columnHover 3s ease-in-out infinite;
+}
+
+/* Melhorias de Performance */
+.kanban-column,
+.task-card {
+    will-change: transform;
+    transform: translateZ(0);
+    backface-visibility: hidden;
+}
+
+/* Suporte a Gestos */
+@media (hover: none) {
+    .kanban-board {
+        scroll-snap-type: x mandatory;
+        scroll-padding: 1rem;
     }
 
     .kanban-column {
-        min-width: 280px;
+        scroll-snap-align: start;
+    }
+
+    .task-card {
+        user-select: none;
+        -webkit-user-select: none;
     }
 }
 
