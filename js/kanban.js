@@ -5,6 +5,7 @@ import Coluna from '../components/coluna.js';
 import Task from '../components/task.js';
 import Modal from '../components/modal.js';
 import { applyBackground } from './backgroundManager.js';
+import { createEmptyState } from '../components/emptyState.js';
 
 // Verificações iniciais e configurações
 if (!user.load()) {
@@ -36,7 +37,12 @@ async function loadBoard() {
         const columns = await requests.GetColumnsByBoardId(boardId);
         kanbanBoard.innerHTML = '';
         
-        columns.forEach(async column => {
+        if (columns.length === 0) {
+            kanbanBoard.appendChild(createEmptyState('column'));
+            return;
+        }
+        
+        for (const column of columns) {
             const tasks = await requests.GetTasksByColumnId(column.Id);
             const colunaComponent = new Coluna(
                 column,
@@ -49,19 +55,24 @@ async function loadBoard() {
             const colunaElement = colunaComponent.render();
             const taskList = colunaElement.querySelector('.task-list');
             
-            tasks.forEach(task => {
-                const taskComponent = new Task(
-                    task,
-                    handleEditTask,
-                    handleDeleteTask
-                );
-                taskList.appendChild(taskComponent.render());
-            });
+            if (tasks.length === 0) {
+                taskList.appendChild(createEmptyState('task'));
+            } else {
+                tasks.forEach(task => {
+                    const taskComponent = new Task(
+                        task,
+                        handleEditTask,
+                        handleDeleteTask
+                    );
+                    taskList.appendChild(taskComponent.render());
+                });
+            }
             
             kanbanBoard.appendChild(colunaElement);
-        });
+        }
     } catch (error) {
         console.error('Erro ao carregar quadro:', error);
+        kanbanBoard.appendChild(createEmptyState('project'));
     }
 }
 

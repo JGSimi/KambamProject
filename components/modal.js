@@ -13,6 +13,293 @@ export default class Modal {
         this.touchDiff = 0;
         this.isClosing = false;
         this.scrollLock = false;
+        
+        // Adiciona os estilos se ainda não foram adicionados
+        if (!document.getElementById('modal-styles')) {
+            this.addStyles();
+        }
+    }
+
+    addStyles() {
+        const style = document.createElement('style');
+        style.id = 'modal-styles';
+        style.textContent = `
+            .modal {
+                position: fixed;
+                top: 0;
+                left: 0;
+                width: 100%;
+                height: 100%;
+                display: flex;
+                align-items: center;
+                justify-content: center;
+                background: rgba(0, 0, 0, 0.2);
+                backdrop-filter: blur(8px);
+                opacity: 0;
+                transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+                z-index: 1000;
+            }
+
+            .modal.show {
+                opacity: 1;
+            }
+
+            .modal-content {
+                position: relative;
+                width: 90%;
+                max-width: 500px;
+                background: var(--card-background);
+                backdrop-filter: blur(20px) saturate(180%);
+                border-radius: 16px;
+                box-shadow: 0 8px 32px var(--shadow-color);
+                transform: translateY(20px) scale(0.95);
+                opacity: 0;
+                transition: all 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+                overflow: hidden;
+                border: 1px solid var(--border-color);
+            }
+
+            .modal.show .modal-content {
+                transform: translateY(0) scale(1);
+                opacity: 1;
+            }
+
+            .modal-header {
+                position: relative;
+                padding: 20px 24px;
+                border-bottom: 1px solid var(--border-color);
+                background: var(--card-background);
+            }
+
+            .modal-header h2 {
+                margin: 0;
+                font-size: 1.25rem;
+                font-weight: 600;
+                color: var(--text-color);
+            }
+
+            .modal-drag-handle {
+                position: absolute;
+                top: 0;
+                left: 50%;
+                transform: translateX(-50%);
+                width: 40px;
+                height: 4px;
+                background: var(--border-color);
+                border-radius: 2px;
+                margin: 8px 0;
+            }
+
+            .modal-body {
+                padding: 24px;
+                max-height: calc(100vh - 200px);
+                overflow-y: auto;
+                -webkit-overflow-scrolling: touch;
+                color: var(--text-color);
+            }
+
+            .modal-body::-webkit-scrollbar {
+                width: 8px;
+            }
+
+            .modal-body::-webkit-scrollbar-track {
+                background: var(--border-color);
+                border-radius: 4px;
+            }
+
+            .modal-body::-webkit-scrollbar-thumb {
+                background: var(--text-secondary);
+                border-radius: 4px;
+            }
+
+            .modal-actions {
+                padding: 16px 24px;
+                display: flex;
+                justify-content: flex-end;
+                gap: 12px;
+                border-top: 1px solid var(--border-color);
+                background: var(--card-background);
+            }
+
+            .modal button {
+                padding: 8px 16px;
+                border-radius: 8px;
+                font-size: 0.9rem;
+                font-weight: 500;
+                transition: all 0.2s ease;
+                display: flex;
+                align-items: center;
+                gap: 8px;
+                border: none;
+                cursor: pointer;
+            }
+
+            .modal button i {
+                font-size: 1rem;
+            }
+
+            .close-btn {
+                position: absolute;
+                right: 16px;
+                top: 16px;
+                width: 32px;
+                height: 32px;
+                border-radius: 50%;
+                display: flex;
+                align-items: center;
+                justify-content: center;
+                background: var(--border-color);
+                border: none;
+                cursor: pointer;
+                transition: all 0.2s ease;
+                color: var(--text-color);
+            }
+
+            .close-btn:hover {
+                background: var(--hover-shadow);
+                transform: scale(1.1);
+            }
+
+            .cancel-btn {
+                background: var(--border-color);
+                color: var(--text-color);
+            }
+
+            .cancel-btn:hover {
+                background: var(--hover-shadow);
+                transform: scale(1.02);
+            }
+
+            .submit-btn {
+                background: var(--primary-color);
+                color: white;
+            }
+
+            .submit-btn:hover {
+                filter: brightness(1.1);
+                transform: scale(1.02);
+            }
+
+            .modal input,
+            .modal textarea,
+            .modal select {
+                width: 100%;
+                padding: 12px;
+                border: 1px solid var(--border-color);
+                border-radius: 8px;
+                margin-bottom: 16px;
+                font-size: 1rem;
+                background: var(--card-background);
+                color: var(--text-color);
+                transition: all 0.2s ease;
+            }
+
+            .modal input:focus,
+            .modal textarea:focus,
+            .modal select:focus {
+                outline: none;
+                border-color: var(--primary-color);
+                box-shadow: 0 0 0 3px var(--shadow-color);
+            }
+
+            .modal label {
+                display: block;
+                margin-bottom: 8px;
+                font-weight: 500;
+                color: var(--text-color);
+            }
+
+            .modal .form-error {
+                color: #FF3B30;
+                font-size: 0.85rem;
+                margin-top: -12px;
+                margin-bottom: 16px;
+                display: flex;
+                align-items: center;
+                gap: 4px;
+            }
+
+            .modal .form-error::before {
+                content: "!";
+                display: inline-flex;
+                align-items: center;
+                justify-content: center;
+                width: 16px;
+                height: 16px;
+                background: #FF3B30;
+                color: white;
+                border-radius: 50%;
+                font-size: 0.75rem;
+                font-weight: bold;
+            }
+
+            .modal input.error {
+                border-color: #FF3B30;
+                background: rgba(255, 59, 48, 0.05);
+            }
+
+            .modal input[type="color"] {
+                height: 40px;
+                padding: 4px;
+                cursor: pointer;
+            }
+
+            .modal select {
+                appearance: none;
+                background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' viewBox='0 0 12 12'%3E%3Cpath fill='%23666' d='M6 8.825L1.175 4 2.238 2.938 6 6.7l3.763-3.762L10.825 4z'/%3E%3C/svg%3E");
+                background-repeat: no-repeat;
+                background-position: right 12px center;
+                padding-right: 36px;
+            }
+
+            @media (max-width: 768px) {
+                .modal-content {
+                    width: 100%;
+                    max-width: none;
+                    margin: 16px;
+                    border-radius: 12px;
+                }
+
+                .modal-body {
+                    max-height: calc(100vh - 180px);
+                }
+            }
+
+            @keyframes shake {
+                0%, 100% { transform: translateX(0); }
+                25% { transform: translateX(-4px); }
+                75% { transform: translateX(4px); }
+            }
+
+            .modal .error-shake {
+                animation: shake 0.4s ease-in-out;
+            }
+
+            .modal-mobile {
+                margin: 0;
+                border-radius: 20px 20px 0 0;
+                height: 85vh;
+                position: fixed;
+                bottom: 0;
+                left: 0;
+                right: 0;
+                transform: translateY(100%);
+                transition: transform 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+            }
+
+            .modal.show .modal-mobile {
+                transform: translateY(0);
+            }
+
+            .modal .form-group {
+                margin-bottom: 20px;
+            }
+
+            .modal .form-group:last-child {
+                margin-bottom: 0;
+            }
+        `;
+        document.head.appendChild(style);
     }
 
     createModal() {
