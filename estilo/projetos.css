@@ -361,7 +361,7 @@ input:checked + .slider:before {
 
 .search-container {
     margin-bottom: 2rem;
-    padding: 0 1rem;
+    padding: 1rem;
     display: flex;
     align-items: center;
     gap: 1rem;
@@ -370,7 +370,6 @@ input:checked + .slider:before {
 .search-wrapper {
     position: relative;
     flex: 1;
-    max-width: 600px;
 }
 
 .search-wrapper i.fa-search {
@@ -383,7 +382,7 @@ input:checked + .slider:before {
 }
 
 #projectSearch {
-    width: 100%;
+    width: 90%;
     padding: 1rem 1rem 1rem 3rem;
     border: 1px solid var(--border-color);
     border-radius: 12px;
@@ -442,7 +441,7 @@ input:checked + .slider:before {
     background: var(--card-background);
     border: 1px solid var(--border-color);
     border-radius: 12px;
-    padding: 0.8rem 1.2rem;
+    padding: 1rem;
     display: flex;
     align-items: center;
     gap: 0.5rem;
