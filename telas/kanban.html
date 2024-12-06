@@ -7,6 +7,7 @@
     <link rel="stylesheet" href="../estilo/styles.css">
     <link rel="stylesheet" href="../estilo/kanban.css">
     <link rel="stylesheet" href="../estilo/modal.css">
+    <link rel="stylesheet" href="../estilo/animations.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
 </head>
 <body>
@@ -51,50 +52,6 @@
                 <!-- Colunas serão inseridas aqui -->
             </div>
         </main>
-    </div>
-
-    <!-- Modal de Nova Coluna -->
-    <div id="columnModal" class="modal">
-        <div class="modal-content">
-            <div class="modal-header">
-                <h2>Nova Coluna</h2>
-                <button class="close-btn"><i class="fas fa-times"></i></button>
-            </div>
-            <form id="columnForm">
-                <div class="form-group">
-                    <label for="columnName">Nome da Coluna</label>
-                    <input type="text" id="columnName" required>
-                </div>
-                <div class="modal-actions">
-                    <button type="button" class="cancel-btn">Cancelar</button>
-                    <button type="submit" class="submit-btn">Criar Coluna</button>
-                </div>
-            </form>
-        </div>
-    </div>
-
-    <!-- Modal de Nova Tarefa -->
-    <div id="taskModal" class="modal">
-        <div class="modal-content">
-            <div class="modal-header">
-                <h2>Nova Tarefa</h2>
-                <button class="close-btn"><i class="fas fa-times"></i></button>
-            </div>
-            <form id="taskForm">
-                <div class="form-group">
-                    <label for="taskTitle">Título</label>
-                    <input type="text" id="taskTitle" required>
-                </div>
-                <div class="form-group">
-                    <label for="taskDescription">Descrição</label>
-                    <textarea id="taskDescription" rows="3"></textarea>
-                </div>
-                <div class="modal-actions">
-                    <button type="button" class="cancel-btn">Cancelar</button>
-                    <button type="submit" class="submit-btn">Criar Tarefa</button>
-                </div>
-            </form>
-        </div>
     </div>
 
     <script type="module" src="../js/kanban.js"></script>

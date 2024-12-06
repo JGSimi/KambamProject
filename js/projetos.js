@@ -2,6 +2,7 @@ import requests from '../service/request.js';
 import user from '../service/user.js';
 import theme from '../service/theme.js';
 import { applyBackground } from './backgroundManager.js';
+import Modal from '../components/modal.js';
 
 // Verifica se o usuário está logado
 if (!user.load()) {
@@ -15,8 +16,41 @@ theme.init();
 const projectsGrid = document.getElementById('projectsGrid');
 const userName = document.getElementById('userName');
 const newProjectBtn = document.getElementById('newProjectBtn');
-const projectModal = document.getElementById('projectModal');
-const projectForm = document.getElementById('projectForm');
+const projectModal = new Modal({
+    title: 'Novo Projeto',
+    content: `
+        <form id="projectForm" class="responsive-form">
+            <div class="form-group">
+                <label for="projectName">Nome do Projeto</label>
+                <input type="text" id="projectName" name="name" required>
+            </div>
+            <div class="form-group">
+                <label for="projectDescription">Descrição</label>
+                <textarea id="projectDescription" name="description" rows="3"></textarea>
+            </div>
+            <div class="form-group">
+                <label for="projectColor">Cor do Projeto</label>
+                <input type="color" id="projectColor" name="color" value="#007AFF">
+            </div>
+        </form>
+    `,
+    onSubmit: async (formData) => {
+        try {
+            await requests.CreateBoard({
+                Name: formData.name,
+                Description: formData.description,
+                HexaBackgroundCoor: formData.color,
+                IsActive: true,
+                CreatedBy: user.Id,
+                UpdatedBy: user.Id
+            });
+            
+            loadProjects();
+        } catch (error) {
+            console.error('Erro ao criar projeto:', error);
+        }
+    }
+});
 const logoutBtn = document.getElementById('logoutBtn');
 const themeToggle = document.getElementById('themeToggle');
 const projectSearch = document.getElementById('projectSearch');
@@ -127,39 +161,7 @@ const filterProjects = (searchTerm) => {
 
 // Event Listeners
 newProjectBtn.addEventListener('click', () => {
-    projectModal.classList.add('show');
-});
-
-projectForm.addEventListener('submit', async (e) => {
-    e.preventDefault();
-    
-    const name = document.getElementById('projectName').value;
-    const description = document.getElementById('projectDescription').value;
-    const color = document.getElementById('projectColor').value;
-    
-    try {
-        await requests.CreateBoard({
-            Name: name,
-            Description: description,
-            HexaBackgroundCoor: color,
-            IsActive: true,
-            CreatedBy: user.Id,
-            UpdatedBy: user.Id
-        });
-        
-        projectModal.classList.remove('show');
-        projectForm.reset();
-        loadProjects();
-    } catch (error) {
-        console.error('Erro ao criar projeto:', error);
-    }
-});
-
-document.querySelectorAll('.close-btn, .cancel-btn').forEach(btn => {
-    btn.addEventListener('click', () => {
-        projectModal.classList.remove('show');
-        projectForm.reset();
-    });
+    projectModal.show();
 });
 
 logoutBtn.addEventListener('click', () => {

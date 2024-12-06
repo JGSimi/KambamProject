@@ -7,6 +7,7 @@
     <link rel="stylesheet" href="../estilo/styles.css">
     <link rel="stylesheet" href="../estilo/projetos.css">
     <link rel="stylesheet" href="../estilo/modal.css">
+    <link rel="stylesheet" href="../estilo/animations.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
 </head>
 <body>
@@ -60,34 +61,6 @@
                 <!-- Projetos serão inseridos aqui dinamicamente -->
             </div>
         </main>
-    </div>
-
-    <!-- Modal de Novo Projeto -->
-    <div id="projectModal" class="modal">
-        <div class="modal-content">
-            <div class="modal-header">
-                <h2>Novo Projeto</h2>
-                <button class="close-btn"><i class="fas fa-times"></i></button>
-            </div>
-            <form id="projectForm">
-                <div class="form-group">
-                    <label for="projectName">Nome do Projeto</label>
-                    <input type="text" id="projectName" required>
-                </div>
-                <div class="form-group">
-                    <label for="projectDescription">Descrição</label>
-                    <textarea id="projectDescription" rows="3"></textarea>
-                </div>
-                <div class="form-group">
-                    <label for="projectColor">Cor do Projeto</label>
-                    <input type="color" id="projectColor" value="#007AFF">
-                </div>
-                <div class="modal-actions">
-                    <button type="button" class="cancel-btn">Cancelar</button>
-                    <button type="submit" class="submit-btn">Criar Projeto</button>
-                </div>
-            </form>
-        </div>
     </div>
 
     <script type="module" src="../js/projetos.js"></script>

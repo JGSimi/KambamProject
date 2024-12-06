@@ -69,14 +69,173 @@
 }
 
 .modal-actions {
-    padding: 1.25rem 1.5rem;
-    border-top: 1px solid var(--border-color);
     display: flex;
     justify-content: flex-end;
     gap: 1rem;
+    margin-top: 2rem;
+}
+
+.modal-btn {
+    padding: 0.75rem 1.5rem;
+    border-radius: 10px;
+    font-size: 1rem;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    border: 1px solid var(--border-color);
     background: var(--card-background);
-    backdrop-filter: blur(10px);
-    -webkit-backdrop-filter: blur(10px);
+    color: var(--text-color);
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+}
+
+.modal-btn:hover {
+    transform: translateY(-2px);
+}
+
+.modal-btn.primary {
+    background: var(--primary-color);
+    color: white;
+    border: none;
+}
+
+.modal-btn.primary:hover {
+    background: rgba(var(--primary-rgb), 0.9);
+    box-shadow: 0 4px 12px rgba(var(--primary-rgb), 0.2);
+}
+
+.modal-btn.secondary {
+    background: transparent;
+    border: 1px solid var(--border-color);
+}
+
+.modal-btn.secondary:hover {
+    border-color: var(--primary-color);
+    color: var(--primary-color);
+}
+
+/* Ajustes para tema escuro */
+.dark-theme .modal-btn {
+    background: rgba(30, 30, 35, 0.4);
+}
+
+.dark-theme .modal-btn.primary {
+    background: var(--primary-color);
+}
+
+.dark-theme .modal-btn.secondary {
+    background: transparent;
+    border: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+/* Ajustes Mobile */
+@media (max-width: 768px) {
+    .modal-actions {
+        flex-direction: column;
+        margin-top: 1.5rem;
+    }
+
+    .modal-btn {
+        width: 100%;
+        justify-content: center;
+        padding: 1rem;
+    }
+}
+
+/* Drag Handle e Gestos */
+.modal-drag-handle {
+    position: absolute;
+    top: 0;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 40px;
+    height: 4px;
+    background: var(--border-color);
+    border-radius: 2px;
+    margin: 8px 0;
+    opacity: 0;
+    transition: opacity 0.3s ease;
+}
+
+.modal-mobile .modal-drag-handle {
+    opacity: 0.5;
+}
+
+/* Formulários Aprimorados */
+.form-group {
+    position: relative;
+    margin-bottom: 1.5rem;
+}
+
+.form-group.error input,
+.form-group.error select,
+.form-group.error textarea {
+    border-color: #ff3b30;
+    box-shadow: 0 0 0 1px #ff3b30;
+}
+
+.form-error {
+    color: #ff3b30;
+    font-size: 0.85rem;
+    margin-top: 0.5rem;
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    animation: shake 0.5s cubic-bezier(0.36, 0.07, 0.19, 0.97) both;
+}
+
+.form-error::before {
+    content: "⚠️";
+    font-size: 1rem;
+}
+
+/* Animações */
+@keyframes shake {
+    10%, 90% {
+        transform: translateX(-1px);
+    }
+    20%, 80% {
+        transform: translateX(2px);
+    }
+    30%, 50%, 70% {
+        transform: translateX(-4px);
+    }
+    40%, 60% {
+        transform: translateX(4px);
+    }
+}
+
+/* Melhorias de Acessibilidade */
+.modal:focus {
+    outline: none;
+}
+
+.modal-content:focus-visible {
+    outline: 2px solid var(--primary-color);
+    outline-offset: 2px;
+}
+
+.close-btn:focus-visible,
+.cancel-btn:focus-visible,
+.submit-btn:focus-visible {
+    outline: 2px solid var(--primary-color);
+    outline-offset: 2px;
+}
+
+/* Estados Ativos e Feedback */
+.close-btn.active,
+.cancel-btn.active,
+.submit-btn.active {
+    transform: scale(0.95);
+}
+
+/* Suporte a Gestos */
+.modal-content.swiping {
+    transition: none !important;
+}
+
+.modal-content.will-close {
+    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
 }
 
 /* Responsividade Aprimorada */
@@ -104,11 +263,14 @@
         top: 0;
         z-index: 10;
         padding: 1rem;
+        backdrop-filter: blur(10px);
+        -webkit-backdrop-filter: blur(10px);
     }
 
     .modal-body {
         padding: 1.25rem 1rem;
         max-height: none;
+        -webkit-overflow-scrolling: touch;
     }
 
     .modal-actions {
@@ -116,37 +278,22 @@
         bottom: 0;
         padding: 1rem;
         gap: 0.75rem;
+        backdrop-filter: blur(10px);
+        -webkit-backdrop-filter: blur(10px);
+        border-top: 1px solid var(--border-color);
     }
 
-    .form-group {
-        margin-bottom: 1.25rem;
-    }
-
-    .form-group input[type="text"],
-    .form-group input[type="email"],
-    .form-group input[type="password"],
+    .form-group input,
+    .form-group select,
     .form-group textarea {
-        padding: 0.875rem;
         font-size: 16px;
+        padding: 0.875rem;
         border-radius: 12px;
     }
 
     .close-btn {
         padding: 0.75rem;
         margin: -0.75rem -0.75rem -0.75rem 0;
-    }
-
-    /* Gestos de Swipe */
-    .modal-content {
-        touch-action: pan-y pinch-zoom;
-    }
-
-    .modal-content.swiping {
-        transition: none;
-    }
-
-    .modal-content.will-close {
-        transform: translateY(100%);
     }
 }
 
@@ -172,8 +319,8 @@
     .cancel-btn,
     .submit-btn {
         width: 100%;
-        padding: 0.875rem;
         justify-content: center;
+        padding: 0.875rem;
         font-size: 1rem;
     }
 }
@@ -192,32 +339,10 @@
         min-width: 44px;
     }
 
-    .form-group input[type="text"],
-    .form-group input[type="email"],
-    .form-group input[type="password"],
+    .form-group input,
+    .form-group select,
     .form-group textarea {
         min-height: 44px;
-    }
-}
-
-/* Animações */
-@keyframes modalFadeIn {
-    from {
-        opacity: 0;
-        backdrop-filter: blur(0);
-    }
-    to {
-        opacity: 1;
-        backdrop-filter: blur(8px);
-    }
-}
-
-@keyframes modalSlideUp {
-    from {
-        transform: translateY(100%);
-    }
-    to {
-        transform: translateY(0);
     }
 }
 
@@ -225,6 +350,10 @@
 .dark-theme .modal-content {
     background: rgba(30, 30, 35, 0.95);
     border-color: rgba(255, 255, 255, 0.1);
+}
+
+.dark-theme .modal-drag-handle {
+    background: rgba(255, 255, 255, 0.2);
 }
 
 /* Scrollbar Personalizada */
@@ -244,12 +373,6 @@
 .modal-body::-webkit-scrollbar-thumb {
     background-color: var(--border-color);
     border-radius: 4px;
-}
-
-/* Feedback Visual */
-.submit-btn:active,
-.cancel-btn:active {
-    transform: scale(0.98);
 }
 
 /* Prevenção de Scroll do Body */

@@ -198,8 +198,8 @@ addColumnBtn.addEventListener('click', () => {
 
 editBoardBtn.addEventListener('click', async () => {
     try {
-        const project = await requests.GetBoardById(boardId);
-        handleEditProject(project);
+        const board = await requests.GetBoardById(boardId);
+        handleEditProject(board);
     } catch (error) {
         console.error('Erro ao carregar dados do projeto:', error);
     }
