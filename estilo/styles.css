@@ -842,6 +842,7 @@ body.modal-open {
     z-index: 999999;
     transform: translate(-50%, -50%);
     transition: width 0.2s ease, height 0.2s ease;
+    mix-blend-mode: difference;
 }
 
 .cursor-follower {
@@ -854,38 +855,120 @@ body.modal-open {
     z-index: 999998;
     transform: translate(-50%, -50%);
     transition: width 0.2s ease, height 0.2s ease, transform 0.1s ease;
+    mix-blend-mode: difference;
+}
+
+/* Rastro do cursor */
+.cursor-trail {
+    position: fixed;
+    pointer-events: none;
+    z-index: 999997;
+    transform: translate(-50%, -50%);
+    mix-blend-mode: difference;
+}
+
+.cursor-trail::before {
+    content: '';
+    display: block;
+    width: 6px;
+    height: 6px;
+    background: var(--primary-color);
+    border-radius: 50%;
+    transform: scale(1);
+    opacity: 0;
+    transition: transform 0.3s ease, opacity 0.3s ease;
+}
+
+.cursor-trail::after {
+    content: '';
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    width: 20px;
+    height: 20px;
+    background: radial-gradient(circle, var(--primary-color) 0%, transparent 70%);
+    transform: translate(-50%, -50%);
+    opacity: 0;
+    filter: blur(2px);
+}
+
+.cursor-trail.active::before {
+    animation: trailPulse 0.8s cubic-bezier(0.23, 1, 0.32, 1) forwards;
+}
+
+.cursor-trail.active::after {
+    animation: trailGlow 0.8s cubic-bezier(0.23, 1, 0.32, 1) forwards;
+}
+
+@keyframes trailPulse {
+    0% {
+        opacity: 0.8;
+        transform: scale(1);
+        filter: blur(0px);
+    }
+    50% {
+        opacity: 0.4;
+        transform: scale(0.6);
+        filter: blur(1px);
+    }
+    100% {
+        opacity: 0;
+        transform: scale(0.2);
+        filter: blur(2px);
+    }
+}
+
+@keyframes trailGlow {
+    0% {
+        opacity: 0.5;
+        transform: translate(-50%, -50%) scale(1);
+    }
+    50% {
+        opacity: 0.3;
+        transform: translate(-50%, -50%) scale(1.5);
+    }
+    100% {
+        opacity: 0;
+        transform: translate(-50%, -50%) scale(2);
+    }
 }
 
 /* Estados do cursor */
 .cursor-clickable {
     width: 12px;
     height: 12px;
+    background: #fff;
 }
 
 .follower-clickable {
     width: 32px;
     height: 32px;
-    background: rgba(var(--primary-rgb), 0.1);
+    border-color: #fff;
+    background: rgba(255, 255, 255, 0.1);
 }
 
 .cursor-text {
     width: 3px;
     height: 24px;
     border-radius: 1px;
+    background: #fff;
 }
 
 .follower-text {
     width: 12px;
     height: 12px;
     opacity: 0.5;
+    border-color: #fff;
 }
 
 .cursor-click {
     transform: translate(-50%, -50%) scale(0.8);
+    background: #fff;
 }
 
 .follower-click {
     transform: translate(-50%, -50%) scale(0.8);
+    border-color: #fff;
 }
 
 /* Esconde cursor padrão */
@@ -897,12 +980,22 @@ a, button, .clickable, input, textarea, [contenteditable="true"],
 /* Dispositivos touch */
 @media (hover: none) {
     .cursor,
-    .cursor-follower {
+    .cursor-follower,
+    .cursor-trail {
         display: none !important;
     }
     
     a, button, .clickable, input, textarea, [contenteditable="true"],
     .project-card, .task-card, .add-task-btn, .action-btn {
         cursor: pointer !important;
+    }
+}
+
+/* Dark mode */
+@media (prefers-color-scheme: dark) {
+    .cursor,
+    .cursor-follower,
+    .cursor-trail {
+        mix-blend-mode: screen;
     }
 }
