@@ -8,6 +8,8 @@
     --shadow-color: rgba(0, 0, 0, 0.1);
     --hover-shadow: rgba(0, 0, 0, 0.15);
     --primary-rgb: 0, 122, 255;
+    --cursor-color: rgba(0, 122, 255, 0.8);
+    --cursor-trail: rgba(0, 122, 255, 0.2);
 }
 
 body {
@@ -826,5 +828,81 @@ body.modal-open {
 @media (min-width: 1200px) {
     .hide-xl-up {
         display: none !important;
+    }
+}
+
+/* Cursor Personalizado */
+.cursor {
+    width: 8px;
+    height: 8px;
+    background: var(--primary-color);
+    border-radius: 50%;
+    position: fixed;
+    pointer-events: none;
+    z-index: 999999;
+    transform: translate(-50%, -50%);
+    transition: width 0.2s ease, height 0.2s ease;
+}
+
+.cursor-follower {
+    width: 24px;
+    height: 24px;
+    border: 2px solid var(--primary-color);
+    border-radius: 50%;
+    position: fixed;
+    pointer-events: none;
+    z-index: 999998;
+    transform: translate(-50%, -50%);
+    transition: width 0.2s ease, height 0.2s ease, transform 0.1s ease;
+}
+
+/* Estados do cursor */
+.cursor-clickable {
+    width: 12px;
+    height: 12px;
+}
+
+.follower-clickable {
+    width: 32px;
+    height: 32px;
+    background: rgba(var(--primary-rgb), 0.1);
+}
+
+.cursor-text {
+    width: 3px;
+    height: 24px;
+    border-radius: 1px;
+}
+
+.follower-text {
+    width: 12px;
+    height: 12px;
+    opacity: 0.5;
+}
+
+.cursor-click {
+    transform: translate(-50%, -50%) scale(0.8);
+}
+
+.follower-click {
+    transform: translate(-50%, -50%) scale(0.8);
+}
+
+/* Esconde cursor padrão */
+a, button, .clickable, input, textarea, [contenteditable="true"],
+.project-card, .task-card, .add-task-btn, .action-btn {
+    cursor: none !important;
+}
+
+/* Dispositivos touch */
+@media (hover: none) {
+    .cursor,
+    .cursor-follower {
+        display: none !important;
+    }
+    
+    a, button, .clickable, input, textarea, [contenteditable="true"],
+    .project-card, .task-card, .add-task-btn, .action-btn {
+        cursor: pointer !important;
     }
 }
